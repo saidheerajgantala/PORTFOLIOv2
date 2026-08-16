@@ -1,5 +1,3 @@
-'use client';
-
 import { cn } from '@/lib/utils';
 
 export type StatusKind = 'active' | 'paused' | 'archived';
