@@ -19,7 +19,7 @@ describe('AgentTrace', () => {
     expect(list.textContent).toBeTruthy();
     const items = screen.getAllByRole('listitem', { hidden: true });
     expect(items.length).toBeGreaterThanOrEqual(5);
-    const timestamps = screen.getAllByText(/^\d{2}:\d{2}:\d{2}$/);
+    const timestamps = screen.getAllByText(/^\[\d{2}:\d{2}:\d{2}\]$/);
     expect(timestamps.length).toBeGreaterThanOrEqual(5);
   });
 

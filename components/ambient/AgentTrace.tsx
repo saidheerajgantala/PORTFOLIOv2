@@ -20,8 +20,9 @@ function levelClass(level: TraceLine['level']): string {
 function Line({ line }: { line: TraceLine }) {
   return (
     <li className="flex gap-2 font-mono text-xs leading-relaxed opacity-70">
-      <span className="text-muted shrink-0">{line.timestamp}</span>
+      <span className="text-muted shrink-0">[{line.timestamp}]</span>
       <span className="text-muted shrink-0">{line.component}</span>
+      <span className="text-muted shrink-0">—</span>
       <span className={levelClass(line.level)}>{line.message}</span>
     </li>
   );
