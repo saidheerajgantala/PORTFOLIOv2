@@ -31,7 +31,7 @@ export function HomeShell({ initialRole, initialName, children }: Props) {
 
   return (
     <>
-      {children}
+      <main id="main">{children}</main>
       <AgentTrace />
       <CursorTrail />
       <WhoAmIModal ref={modalRef} />
