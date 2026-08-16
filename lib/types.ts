@@ -1,17 +1,21 @@
-export type Role = 'recruiter' | 'peer' | 'founder' | 'client';
+export const ROLES = ['recruiter', 'peer', 'founder', 'client'] as const;
+export type Role = (typeof ROLES)[number];
 
-export type SectionId =
-  | 'hero'
-  | 'recognition'
-  | 'currently-building'
-  | 'career-arc'
-  | 'ventures'
-  | 'multi-cloud'
-  | 'principles'
-  | 'writing'
-  | 'contact';
+export const SECTION_IDS = [
+  'hero',
+  'recognition',
+  'currently-building',
+  'career-arc',
+  'ventures',
+  'multi-cloud',
+  'principles',
+  'writing',
+  'contact',
+] as const;
+export type SectionId = (typeof SECTION_IDS)[number];
 
-export type VentureStatus = 'active' | 'paused' | 'archived';
+export const VENTURE_STATUSES = ['active', 'paused', 'archived'] as const;
+export type VentureStatus = (typeof VENTURE_STATUSES)[number];
 
 export interface Venture {
   slug: string;
@@ -33,6 +37,11 @@ export interface CareerStop {
   achievements: string[];
 }
 
+export interface ImpactMetric {
+  label: string;
+  value: string;
+}
+
 export interface CaseStudyMeta {
   slug: string;
   title: string;
@@ -40,5 +49,5 @@ export interface CaseStudyMeta {
   period: string;
   role: string;
   stack: string[];
-  impact: Array<{ label: string; value: string }>;
+  impact: ImpactMetric[];
 }
