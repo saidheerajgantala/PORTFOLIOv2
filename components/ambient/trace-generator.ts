@@ -1,3 +1,8 @@
+/**
+ * Generates a synthetic agent-trace log line for ambient display.
+ * Components and message templates are inspired by LangGraph, Temporal,
+ * Backstage, and Google ADK.
+ */
 export type TraceLevel = 'ok' | 'retry' | 'fail';
 
 export interface TraceLine {
@@ -29,7 +34,7 @@ const ACTIONS = [
   { msg: 'workflow "{ID}" failed', level: 'fail' as const },
 ];
 
-const ID = (n: number) => Math.floor(Math.random() * 0xffff).toString(16).padStart(4, '0');
+const ID = () => Math.floor(Math.random() * 0xffff).toString(16).padStart(4, '0');
 const NUM = () => Math.floor(Math.random() * 900) + 100;
 
 export function generateTraceLine(): TraceLine {
@@ -38,8 +43,8 @@ export function generateTraceLine(): TraceLine {
   const t = new Date();
   const timestamp = `${pad(t.getHours())}:${pad(t.getMinutes())}:${pad(t.getSeconds())}`;
   const message = action.msg
-    .replace('{HEX}', ID(Math.random() * 0xffff))
-    .replace('{ID}', component.toLowerCase().replace(/\s+/g, '-') + '-' + ID(Math.random() * 0xffff))
+    .replace('{HEX}', ID())
+    .replace('{ID}', component.toLowerCase().replace(/\s+/g, '-') + '-' + ID())
     .replace('{N}', String(NUM()));
   return {
     id: `${timestamp}-${Math.random().toString(36).slice(2, 8)}`,

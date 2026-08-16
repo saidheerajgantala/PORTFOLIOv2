@@ -15,4 +15,11 @@ describe('generateTraceLine', () => {
     for (let i = 0; i < 100; i++) set.add(generateTraceLine().id);
     expect(set.size).toBeGreaterThan(90);
   });
+
+  it('substitutes {HEX}, {ID}, {N} placeholders', () => {
+    for (let i = 0; i < 50; i++) {
+      const { message } = generateTraceLine();
+      expect(message).not.toMatch(/\{(HEX|ID|N)\}/);
+    }
+  });
 });
