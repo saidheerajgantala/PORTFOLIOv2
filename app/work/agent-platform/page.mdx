@@ -1,0 +1,28 @@
+export const metadata = {
+  title: 'Enterprise Agent Platform — Saidheeraj Gantala',
+};
+
+# The brief
+
+EPAM wanted to ship AI agents to enterprise clients without each client
+team having to re-build the orchestration layer. The platform needed
+to be reliable enough to sign contracts against, observable enough to
+satisfy security reviews, and cheap enough to be a differentiator.
+
+## What I built
+
+- A LangGraph-based runtime that wraps every client agent as a
+  reproducible state machine
+- A Temporal workflow layer that handles long-running, multi-step
+  agent processes with retry, idempotency, and human-in-the-loop
+- An RCA subsystem that triages agent failures, classifies them into
+  known vs. novel patterns, and routes novel ones to an on-call engineer
+- An RBAC model that lets client admins control who can invoke which
+  agents and what data they can touch
+
+## What I learned
+
+The hardest part wasn't the agents — it was the contracts. Every
+client wanted different SLAs, different data residency, different
+observability backends. We built the platform to be the same everywhere
+and the contracts to be the customisation surface.
