@@ -1,0 +1,33 @@
+export const metadata = {
+  title: 'JobHarvester — Saidheeraj Gantala',
+};
+
+# The brief
+
+Job boards are noisy. Most candidates waste hours opening the same
+listing on five different sites, copy-pasting descriptions, and
+guessing which roles actually match their skills. I wanted a single
+feed that ranks, dedupes, and explains why each role fits — or
+doesn't.
+
+## What I built
+
+- A scraper fleet targeting the top 20 job boards, with polite
+  rate-limiting and a circuit-breaker for sites that ban aggressively
+- An embeddings-based dedup layer that collapses near-identical
+  listings across sources
+- A skill-gap analyzer that compares a candidate's resume to the
+  posting's required skills and surfaces the gap
+- A daily-ranked feed with explainers ("strong match: 7/8 skills",
+  "weak match: 2/8 skills", "location mismatch")
+
+## What I learned
+
+The hardest problem wasn't matching candidates to roles — it was
+matching listings to listings. Same job, twenty boards, twenty slightly
+different descriptions. The dedup layer was where I learned that
+embeddings are a great first pass but never quite enough on their own.
+
+I paused the project when I joined EPAM and shifted focus to the
+agent platform, but the matching logic is what inspired how we
+rank documents inside the RCA subsystem today.
