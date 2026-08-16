@@ -1,6 +1,6 @@
 'use client';
 
-import { useState, useEffect, useTransition } from 'react';
+import { useState, useEffect, forwardRef, useImperativeHandle } from 'react';
 import * as Dialog from '@radix-ui/react-dialog';
 import { AnimatePresence, motion } from 'motion/react';
 import { useWhoAmI } from '@/components/entry/whoami-store';
@@ -8,15 +8,17 @@ import { RoleCard } from '@/components/entry/RoleCard';
 import { Input } from '@/components/ui/Input';
 import { Button } from '@/components/ui/Button';
 import type { Role } from '@/lib/types';
+import { ROLES } from '@/lib/types';
 import { ROLE_LABELS } from '@/content/sections';
 
-const ROLES: Role[] = ['recruiter', 'peer', 'founder', 'client'];
+export interface WhoAmIModalHandle {
+  open: () => void;
+}
 
-export function WhoAmIModal() {
+export const WhoAmIModal = forwardRef<WhoAmIModalHandle>(function WhoAmIModal(_, ref) {
   const [open, setOpen] = useState(false);
   const [selected, setSelected] = useState<Role>('peer');
   const [name, setName] = useState('');
-  const [, startTransition] = useTransition();
   const setRole = useWhoAmI((s) => s.setRole);
   const setNameStore = useWhoAmI((s) => s.setName);
 
@@ -24,6 +26,14 @@ export function WhoAmIModal() {
     const seen = localStorage.getItem('whoami-seen');
     if (!seen) setOpen(true);
   }, []);
+
+  useImperativeHandle(
+    ref,
+    () => ({
+      open: () => setOpen(true),
+    }),
+    [],
+  );
 
   const persist = (role: Role, n: string | null) => {
     document.cookie = `whoami-role=${role}; path=/; max-age=31536000; SameSite=Lax`;
@@ -44,7 +54,16 @@ export function WhoAmIModal() {
   };
 
   return (
-    <Dialog.Root open={open} onOpenChange={setOpen}>
+    <Dialog.Root
+      open={open}
+      onOpenChange={(next) => {
+        // If the dialog is closing without a confirm or skip, treat as skip
+        if (!next && localStorage.getItem('whoami-seen') !== '1') {
+          persist('peer', null);
+        }
+        setOpen(next);
+      }}
+    >
       <AnimatePresence>
         {open && (
           <Dialog.Portal forceMount>
@@ -113,4 +132,6 @@ export function WhoAmIModal() {
       </AnimatePresence>
     </Dialog.Root>
   );
-}
+});
+
+WhoAmIModal.displayName = 'WhoAmIModal';
