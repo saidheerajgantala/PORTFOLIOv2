@@ -55,6 +55,7 @@ export const WhoAmIModal = forwardRef<WhoAmIModalHandle>(function WhoAmIModal(_,
 
   return (
     <Dialog.Root
+      modal={false}
       open={open}
       onOpenChange={(next) => {
         // If the dialog is closing without a confirm or skip, treat as skip

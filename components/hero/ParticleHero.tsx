@@ -15,6 +15,7 @@ interface Props {
 export function ParticleHero({ text }: Props) {
   return (
     <div className="relative w-full h-[60vh] flex items-center">
+      <h1 className="sr-only">{text}</h1>
       <div className="absolute inset-0">
         <ParticleField text={text} />
       </div>
