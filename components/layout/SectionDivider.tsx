@@ -16,7 +16,7 @@ export function SectionDivider({ label, sectionId }: SectionDividerProps) {
     );
   }
   return (
-    <div aria-hidden="false" className="my-24 border-t border-border">
+    <div className="my-24 border-b border-border pb-3">
       <div className="flex justify-between font-mono text-xs uppercase tracking-widest mb-3">
         {label && <span className="text-text">{label}</span>}
         {sectionId && <span className="text-muted">{sectionId}</span>}
