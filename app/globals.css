@@ -1,6 +1,13 @@
-@tailwind base;
-@tailwind components;
-@tailwind utilities;
+@import "tailwindcss";
+
+/* v4 reads JS config via @config; this preserves the existing token names. */
+@config "../tailwind.config.ts";
+
+/* Explicit content sources — Tailwind v4 auto-detects most of these, but
+   being explicit avoids surprises with the .mdx extension. */
+@source "./**/*.{ts,tsx,mdx}";
+@source "../components/**/*.{ts,tsx,mdx}";
+@source "../content/**/*.{ts,tsx,mdx}";
 
 :root {
   --bg: #0A0A0B;
@@ -41,5 +48,18 @@ button:focus-visible, a:focus-visible, input:focus-visible, textarea:focus-visib
   *, *::before, *::after {
     animation-duration: 0.01ms !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+@keyframes fadeup {
+  0% {
+    opacity: 0;
+    transform: translateY(0.4em);
+    filter: blur(8px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+    filter: blur(0);
   }
 }

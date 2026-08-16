@@ -1,0 +1,63 @@
+name: Deploy
+
+# Production deploys run after CI passes on main.
+# Vercel-native GitHub integration also works (see docs/DEPLOY.md).
+# Without VERCEL_TOKEN/VERCEL_ORG_ID/VERCEL_PROJECT_ID the job fails fast with
+# an unset-secret error from the action — add the secrets in repo Settings
+# → Secrets → Actions, or delete this file and use Option A in DEPLOY.md.
+on:
+  workflow_run:
+    workflows: [CI]
+    types: [completed]
+    branches: [main]
+  workflow_dispatch:
+
+# Production deploys serialize rather than preempt — cancelling mid-deploy can
+# leave Vercel's edge in an inconsistent state relative to GitHub's view.
+concurrency:
+  group: deploy-${{ github.event.workflow_run.head_branch || github.ref_name }}
+  cancel-in-progress: false
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 10
+    # Only deploy when CI succeeded on a push to main (not PRs, reruns, or skips).
+    if: >
+      github.event_name == 'workflow_dispatch' ||
+      (github.event.workflow_run.conclusion == 'success' &&
+       github.event.workflow_run.event == 'push')
+    environment:
+      name: production
+      url: ${{ steps.deploy.outputs.preview-url }}
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+        with:
+          # When triggered via workflow_run, checkout the SHA that triggered CI;
+          # otherwise (workflow_dispatch) use the runner's SHA.
+          ref: ${{ github.event.workflow_run.head_sha || github.sha }}
+          fetch-depth: 1
+
+      - name: Verify Vercel secrets are configured
+        if: env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == ''
+        run: |
+          echo "::error::Missing required Vercel secrets. Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID to repo Settings → Secrets → Actions, or delete this workflow if you're using Vercel's native GitHub integration (see docs/DEPLOY.md Option A)."
+          exit 1
+
+      - name: Deploy to Vercel (production)
+        id: deploy
+        uses: amondnet/vercel-action@v42
+        with:
+          vercel-token: ${{ secrets.VERCEL_TOKEN }}
+          vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+          vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+          vercel-args: '--prod'
+          working-directory: ./
+
+      - name: Summary
+        if: always()
+        run: |
+          echo "Deployment: ${{ steps.deploy.outputs.preview-url }}"
+          echo "Outcome: ${{ steps.deploy.outcome }}"

@@ -29,13 +29,15 @@ function Line({ line }: { line: TraceLine }) {
 }
 
 export function AgentTrace() {
-  const [lines, setLines] = useState<TraceLine[]>(() =>
-    Array.from({ length: LINE_COUNT }, () => generateTraceLine()),
-  );
+  // Start empty to keep SSR markup deterministic — timestamps are generated on
+  // mount and rotated from there. Without this the server's `new Date()` and the
+  // client's `new Date()` differ by the network round-trip and React throws a
+  // hydration mismatch.
+  const [lines, setLines] = useState<TraceLine[]>([]);
 
   useEffect(() => {
-    if (typeof window === 'undefined') return;
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    setLines(Array.from({ length: LINE_COUNT }, () => generateTraceLine()));
     if (reduceMotion) return;
     const id = setInterval(() => {
       setLines((prev) => [generateTraceLine(), ...prev.slice(0, LINE_COUNT - 1)]);
