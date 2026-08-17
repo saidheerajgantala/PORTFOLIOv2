@@ -2,6 +2,8 @@
 
 This site auto-deploys to Vercel from the `main` branch. There are two supported paths — pick whichever fits your workflow.
 
+> **Note:** Git commit author email must belong to the Vercel team. This repo uses `x5ud0kn1gh7x@gmail.com` as the author email so CI-triggered production deploys pass Vercel's team-access check. Your `git config user.email` should match.
+
 ---
 
 ## Option A — Vercel native GitHub integration (recommended, zero secrets)
