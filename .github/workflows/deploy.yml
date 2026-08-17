@@ -40,12 +40,6 @@ jobs:
           ref: ${{ github.event.workflow_run.head_sha || github.sha }}
           fetch-depth: 1
 
-      - name: Verify Vercel secrets are configured
-        if: env.VERCEL_TOKEN == '' || env.VERCEL_ORG_ID == '' || env.VERCEL_PROJECT_ID == ''
-        run: |
-          echo "::error::Missing required Vercel secrets. Add VERCEL_TOKEN, VERCEL_ORG_ID, and VERCEL_PROJECT_ID to repo Settings → Secrets → Actions, or delete this workflow if you're using Vercel's native GitHub integration (see docs/DEPLOY.md Option A)."
-          exit 1
-
       - name: Deploy to Vercel (production)
         id: deploy
         uses: amondnet/vercel-action@v42
