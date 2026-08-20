@@ -11,8 +11,8 @@ describe('VenturePortfolio', () => {
 
   it('renders all three ventures', () => {
     render(<VenturePortfolio index={5} total={9} />);
-    expect(screen.getByText('Noxtag')).toBeInTheDocument();
+    expect(screen.getByText('Hiiired')).toBeInTheDocument();
+    expect(screen.getByText('Noxstack')).toBeInTheDocument();
     expect(screen.getByText('WeDAA')).toBeInTheDocument();
-    expect(screen.getByText('JobHarvester')).toBeInTheDocument();
   });
 });
