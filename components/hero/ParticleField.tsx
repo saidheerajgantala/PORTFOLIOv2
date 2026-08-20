@@ -4,25 +4,21 @@ import { useRef, useMemo, useEffect, useState } from 'react';
 import { Canvas, useFrame, useThree } from '@react-three/fiber';
 import * as THREE from 'three';
 import { makeParticleTargets } from '@/components/hero/particle-text';
+import { HERO_GREETING_CYCLE } from '@/content/hero-variants';
+import type { Role } from '@/lib/types';
+import type { HeroVariant } from '@/content/hero-variants';
 
-const TEXT_CYCLE = ['Hello.', 'Hi.', 'Hey.', 'Namaste.', 'Howdy.'];
-const CYCLE_MS = 4000;
+const TEXT_CYCLE_MS = 4000;
 const SPAWN_DURATION = 1.8; // seconds for particles to fly into place
-const HOLD_DURATION = 1.2; // seconds particles hold the text before morphing
 const MORPH_DURATION = 1.0; // seconds for one text → next text transition
 
-interface Props {
-  text?: string;
-  particleCount?: number;
-}
-
 // Build a per-particle color so the swarm isn't monotone. Mix of full accent,
-// faded accent, and off-white so the letterforms read as solid shapes but with
-// subtle depth.
-function makeColors(count: number): Float32Array {
+// faded accent, and off-white so the letterforms read as solid shapes but
+// with subtle depth.
+function makeColors(count: number, baseTint: string): Float32Array {
   const out = new Float32Array(count * 3);
-  const accent = new THREE.Color('#C6FF3D');
-  const dim = new THREE.Color('#C6FF3D').multiplyScalar(0.35);
+  const accent = new THREE.Color(baseTint);
+  const dim = new THREE.Color(baseTint).multiplyScalar(0.35);
   const white = new THREE.Color('#F5F5F7');
   for (let i = 0; i < count; i++) {
     const r = Math.random();
@@ -34,22 +30,56 @@ function makeColors(count: number): Float32Array {
   return out;
 }
 
+// Time-of-day hue interpolation for the 'hue' motif.
+// Cool (210°) at 6am → accent (90°) at noon → warm (40°) at 6pm → cool (210°) at midnight.
+function tintForHour(baseTint: string, hour: number): string {
+  const segments: Array<[number, number]> = [
+    [0, 210],
+    [6, 210],
+    [12, 90],
+    [18, 40],
+    [24, 210],
+  ];
+  let hue = segments[segments.length - 1][1];
+  for (let i = 0; i < segments.length - 1; i++) {
+    const [a, ha] = segments[i];
+    const [b, hb] = segments[i + 1];
+    if (hour >= a && hour <= b) {
+      const t = (hour - a) / (b - a);
+      hue = ha + (hb - ha) * t;
+      break;
+    }
+  }
+  const c = new THREE.Color(`hsl(${hue.toFixed(0)}, 90%, 60%)`);
+  const base = new THREE.Color(baseTint);
+  return `#${c.lerp(base, 0.7).getHexString()}`;
+}
+
 function Swarm({
   text,
   nextText,
   morphT,
+  scrollTilt,
+  hueTint,
+  variant,
   particleCount = 3200,
 }: {
   text: string;
   nextText: string;
-  morphT: number; // 0..1 progress through morph
+  morphT: number;
+  scrollTilt: number;
+  hueTint: string;
+  variant: HeroVariant;
   particleCount?: number;
 }) {
   const ref = useRef<THREE.Points>(null);
-  const { size, viewport } = useThree();
+  const { viewport } = useThree();
   const [reduceMotion, setReduceMotion] = useState(false);
   const mouse = useRef({ x: 0, y: 0 });
   const spawnStart = useRef<number | null>(null);
+  // Cached click-ripple state, kept across frames so particles can return
+  // smoothly to their letterform targets once the shockwave finishes.
+  const ripple = useRef<{ active: boolean; t: number; cx: number; cy: number } | null>(null);
 
   useEffect(() => {
     const mql = window.matchMedia('(prefers-reduced-motion: reduce)');
@@ -64,9 +94,22 @@ function Swarm({
       mouse.current.x = (e.clientX / window.innerWidth) * 2 - 1;
       mouse.current.y = (e.clientY / window.innerHeight) * 2 - 1;
     };
+    const onClick = (e: PointerEvent) => {
+      if (variant.motif !== 'ripple' || reduceMotion) return;
+      ripple.current = {
+        active: true,
+        t: 0,
+        cx: (e.clientX / window.innerWidth) * 2 - 1,
+        cy: (e.clientY / window.innerHeight) * 2 - 1,
+      };
+    };
     window.addEventListener('pointermove', onMove);
-    return () => window.removeEventListener('pointermove', onMove);
-  }, []);
+    window.addEventListener('pointerdown', onClick);
+    return () => {
+      window.removeEventListener('pointermove', onMove);
+      window.removeEventListener('pointerdown', onClick);
+    };
+  }, [variant.motif, reduceMotion]);
 
   const targets = useMemo(() => makeParticleTargets(text, 'sans-serif', 4), [text]);
   const nextTargets = useMemo(
@@ -88,7 +131,7 @@ function Swarm({
   }, [particleCount, viewport.width, viewport.height]);
 
   const positions = useMemo(() => spawnPositions.slice(), [spawnPositions]);
-  const colors = useMemo(() => makeColors(particleCount), [particleCount]);
+  const colors = useMemo(() => makeColors(particleCount, hueTint), [particleCount, hueTint]);
 
   useFrame((state, delta) => {
     if (!ref.current || reduceMotion) return;
@@ -102,9 +145,39 @@ function Swarm({
     // ease-out cubic — fast start, soft landing
     const spawnEase = 1 - Math.pow(1 - spawnT, 3);
 
+    // Tug motif: cursor magnet (only on pointer-fine devices).
+    const tug =
+      variant.motif === 'tug' && typeof window !== 'undefined' && window.matchMedia('(pointer: fine)').matches
+        ? { x: mouse.current.x * 0.4, y: -mouse.current.y * 0.4 }
+        : { x: 0, y: 0 };
+
+    // Ripple motif: pointer-down shockwave radiating from click point.
+    let rippleDx = 0;
+    let rippleDy = 0;
+    if (variant.motif === 'ripple' && ripple.current?.active) {
+      ripple.current.t += delta;
+      const elapsed = ripple.current.t;
+      const DURATION = 0.8;
+      if (elapsed > DURATION) {
+        ripple.current.active = false;
+      } else {
+        const rT = elapsed / DURATION;
+        const wave = Math.sin(rT * Math.PI) * (1 - rT);
+        const dist = Math.hypot(
+          mouse.current.x - ripple.current.cx,
+          mouse.current.y - ripple.current.cy,
+        );
+        const falloff = Math.max(0, 1 - dist * 1.5);
+        rippleDx = (mouse.current.x - ripple.current.cx) * wave * 0.6 * falloff;
+        rippleDy = -(mouse.current.y - ripple.current.cy) * wave * 0.6 * falloff;
+      }
+    }
+
+    // Tilt motif: scroll position drives a per-particle z displacement
+    // (mocked Y-axis rotation via the 3D plane).
+    const tiltZ = variant.motif === 'tilt' ? scrollTilt * 1.2 : 0;
+
     const len = Math.max(targets.length, nextTargets.length, 1);
-    const mx = mouse.current.x * 0.25;
-    const my = -mouse.current.y * 0.25;
 
     for (let i = 0; i < particleCount; i++) {
       const i3 = i * 3;
@@ -122,10 +195,9 @@ function Swarm({
       const sy = spawnPositions[i3 + 1];
       const sz = spawnPositions[i3 + 2];
 
-      const x = THREE.MathUtils.lerp(sx, targetX + mx, spawnEase) + swirl;
-      const y = THREE.MathUtils.lerp(sy, targetY + my, spawnEase) + bob;
-      // Fade the spawn z so particles fly toward camera on entrance.
-      const z = THREE.MathUtils.lerp(sz, 0, spawnEase);
+      const x = THREE.MathUtils.lerp(sx, targetX + tug.x + rippleDx, spawnEase) + swirl;
+      const y = THREE.MathUtils.lerp(sy, targetY + tug.y + rippleDy, spawnEase) + bob;
+      const z = THREE.MathUtils.lerp(sz, tiltZ, spawnEase);
 
       arr[i3] = x;
       arr[i3 + 1] = y;
@@ -134,15 +206,8 @@ function Swarm({
     pos.needsUpdate = true;
   });
 
-  // Slight scale-up while spawning so the canvas reads as "arriving" rather
-  // than "fully painted" the moment it mounts.
-  const scale = (() => {
-    if (reduceMotion) return 1;
-    return 0.85 + 0.15 * 1; // visual scale handled by camera; canvas size stable
-  })();
-
   return (
-    <points ref={ref} scale={scale}>
+    <points ref={ref}>
       <bufferGeometry>
         <bufferAttribute
           attach="attributes-position"
@@ -164,11 +229,15 @@ function Swarm({
   );
 }
 
-export function ParticleField({ text: initialText = 'Hello.' }: { text?: string }) {
+export function ParticleField({ role, variant }: { role: Role; variant: HeroVariant }) {
   const [dpr, setDpr] = useState(1);
   const [textIndex, setTextIndex] = useState(0);
   const [nextIndex, setNextIndex] = useState(1);
   const [morphStart, setMorphStart] = useState<number | null>(null);
+  const [scrollTilt, setScrollTilt] = useState(0);
+  const [hueTint, setHueTint] = useState(variant.tint);
+
+  const cycle = HERO_GREETING_CYCLE[role];
 
   useEffect(() => {
     const isMobile = window.matchMedia('(max-width: 768px)').matches;
@@ -180,10 +249,36 @@ export function ParticleField({ text: initialText = 'Hello.' }: { text?: string 
     if (reduceMotion) return;
     const id = setInterval(() => {
       setMorphStart(performance.now() / 1000);
-      setNextIndex((n) => (n + 1) % TEXT_CYCLE.length);
-    }, CYCLE_MS);
+      setNextIndex((n) => (n + 1) % cycle.length);
+    }, TEXT_CYCLE_MS);
     return () => clearInterval(id);
-  }, []);
+  }, [cycle.length]);
+
+  // Tilt: listen to scroll position and update a normalized tilt value.
+  useEffect(() => {
+    if (variant.motif !== 'tilt') return;
+    const onScroll = () => {
+      const max = document.documentElement.scrollHeight - window.innerHeight;
+      const t = max > 0 ? window.scrollY / max : 0;
+      // Map scroll 0→1 to ±0.1 (i.e. ±6° tilt when rendered).
+      setScrollTilt((t - 0.5) * 0.2);
+    };
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, [variant.motif]);
+
+  // Hue: time-of-day tint, refreshed every minute.
+  useEffect(() => {
+    if (variant.motif !== 'hue') return;
+    const update = () => {
+      const hour = new Date().getHours() + new Date().getMinutes() / 60;
+      setHueTint(tintForHour(variant.tint, hour));
+    };
+    update();
+    const id = setInterval(update, 60_000);
+    return () => clearInterval(id);
+  }, [variant.motif, variant.tint]);
 
   // morphT eases 0→1 over MORPH_DURATION then snaps; recomputed each frame.
   const morphT = (() => {
@@ -204,8 +299,8 @@ export function ParticleField({ text: initialText = 'Hello.' }: { text?: string 
     }
   }, [morphStart, nextIndex]);
 
-  const text = TEXT_CYCLE[textIndex];
-  const nextText = TEXT_CYCLE[nextIndex];
+  const text = cycle[textIndex];
+  const nextText = cycle[nextIndex];
 
   return (
     <Canvas
@@ -213,7 +308,14 @@ export function ParticleField({ text: initialText = 'Hello.' }: { text?: string 
       camera={{ position: [0, 0, 5], fov: 50 }}
       style={{ width: '100%', height: '100%' }}
     >
-      <Swarm text={text} nextText={nextText} morphT={morphT} />
+      <Swarm
+        text={text}
+        nextText={nextText}
+        morphT={morphT}
+        scrollTilt={scrollTilt}
+        hueTint={hueTint}
+        variant={variant}
+      />
     </Canvas>
   );
 }
