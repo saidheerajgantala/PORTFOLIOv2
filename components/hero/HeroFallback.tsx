@@ -2,11 +2,14 @@
 
 import { useEffect, useState } from 'react';
 import { motion, AnimatePresence } from 'motion/react';
+import { HERO_GREETING_CYCLE } from '@/content/hero-variants';
+import type { Role } from '@/lib/types';
+import type { HeroVariant } from '@/content/hero-variants';
 
-const PHRASES = ['Hello.', 'Hi.', 'Hey.', 'Namaste.', 'Howdy.'];
 const ROTATE_MS = 2800;
 
-export function HeroFallback({ text }: { text: string }) {
+export function HeroFallback({ role, variant }: { role: Role; variant: HeroVariant }) {
+  const phrases = HERO_GREETING_CYCLE[role];
   const [index, setIndex] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -20,9 +23,9 @@ export function HeroFallback({ text }: { text: string }) {
 
   useEffect(() => {
     if (reduceMotion) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % PHRASES.length), ROTATE_MS);
+    const id = setInterval(() => setIndex((i) => (i + 1) % phrases.length), ROTATE_MS);
     return () => clearInterval(id);
-  }, [reduceMotion]);
+  }, [reduceMotion, phrases.length]);
 
   return (
     <div className="relative w-full">
@@ -70,7 +73,7 @@ export function HeroFallback({ text }: { text: string }) {
         />
       </motion.div>
 
-      {/* Scanning accent beam — thin vertical lime line, full hero height */}
+      {/* Scanning accent beam — thin vertical line, full hero height */}
       <motion.div
         aria-hidden="true"
         className="pointer-events-none absolute top-0 bottom-0 -z-10 w-px"
@@ -145,7 +148,7 @@ export function HeroFallback({ text }: { text: string }) {
         />
         <AnimatePresence mode="wait">
           <motion.span
-            key={PHRASES[index]}
+            key={phrases[index]}
             className="inline-block relative text-text"
             initial={
               reduceMotion
@@ -177,9 +180,9 @@ export function HeroFallback({ text }: { text: string }) {
                   }
             }
           >
-            {PHRASES[index].split('').map((ch, i) => (
+            {phrases[index].split('').map((ch, i) => (
               <motion.span
-                key={`${PHRASES[index]}-${i}`}
+                key={`${phrases[index]}-${i}`}
                 className="inline-block"
                 initial={reduceMotion ? undefined : { opacity: 0, y: '0.6em' }}
                 animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
@@ -196,16 +199,27 @@ export function HeroFallback({ text }: { text: string }) {
         </AnimatePresence>
       </h1>
 
-      {/* Subtitle hint */}
+      {/* Role-aware subhead */}
       <motion.p
         aria-hidden="true"
-        className="mt-6 font-mono text-xs uppercase tracking-[0.3em] text-text-muted text-center"
+        className="mt-6 font-mono text-xs uppercase tracking-[0.3em] text-text-muted text-center max-w-2xl mx-auto"
         initial={{ opacity: 0, y: 8 }}
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.8, delay: 0.6, ease: 'easeOut' }}
       >
-        ↓ scroll to enter
+        {variant.sub}
       </motion.p>
+
+      {/* Role-aware CTA */}
+      <motion.a
+        href="#contact"
+        className="mt-4 inline-block font-mono text-sm text-text underline decoration-accent decoration-2 underline-offset-[6px] hover:opacity-80 transition-opacity"
+        initial={{ opacity: 0, y: 8 }}
+        animate={{ opacity: 1, y: 0 }}
+        transition={{ duration: 0.8, delay: 0.8, ease: 'easeOut' }}
+      >
+        {variant.cta}
+      </motion.a>
     </div>
   );
 }
