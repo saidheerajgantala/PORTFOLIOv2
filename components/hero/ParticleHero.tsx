@@ -46,8 +46,8 @@ export function ParticleHero({ role, variant }: Props) {
   let overlay: ReactNode = null;
   if (webgl === true) {
     overlay = (
-      <div className="absolute inset-0 mix-blend-screen" aria-hidden="true">
-        <ParticleField role={role} variant={variant} />
+      <div className="absolute inset-0 mix-blend-screen pointer-events-none" aria-hidden="true">
+        <ParticleField />
       </div>
     );
   }
@@ -62,7 +62,7 @@ export function ParticleHero({ role, variant }: Props) {
       className="relative w-full h-[60vh] min-h-[480px] flex items-center justify-center px-6"
       style={style}
     >
-      <h1 className="sr-only">{variant.greeting}</h1>
+      <h1 className="sr-only">Hello</h1>
       <div className="relative w-full max-w-5xl mx-auto text-center">
         <HeroFallback role={role} variant={variant} />
       </div>

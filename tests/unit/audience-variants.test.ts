@@ -19,11 +19,9 @@ describe('audience variants', () => {
 
   it('hero-variants exports 4 role variants with required fields', () => {
     for (const variant of Object.values(HERO_VARIANT)) {
-      expect(variant.greeting.length).toBeGreaterThan(0);
       expect(variant.sub.length).toBeGreaterThan(0);
       expect(variant.cta.length).toBeGreaterThan(0);
       expect(variant.tint).toMatch(/^#[0-9a-fA-F]{6}$/);
-      expect(['tug', 'ripple', 'tilt', 'hue']).toContain(variant.motif);
     }
   });
 });

@@ -6,10 +6,10 @@ import { HERO_GREETING_CYCLE } from '@/content/hero-variants';
 import type { Role } from '@/lib/types';
 import type { HeroVariant } from '@/content/hero-variants';
 
-const ROTATE_MS = 2800;
+const HOLD_MS = 1400;
+const FADE_MS = 300;
 
 export function HeroFallback({ role, variant }: { role: Role; variant: HeroVariant }) {
-  const phrases = HERO_GREETING_CYCLE[role];
   const [index, setIndex] = useState(0);
   const [reduceMotion, setReduceMotion] = useState(false);
 
@@ -23,9 +23,18 @@ export function HeroFallback({ role, variant }: { role: Role; variant: HeroVaria
 
   useEffect(() => {
     if (reduceMotion) return;
-    const id = setInterval(() => setIndex((i) => (i + 1) % phrases.length), ROTATE_MS);
+    // Each phrase: typewriter (~60ms/char × ≤8 chars ≈ ≤480ms) + hold 1400ms
+    // + fade 300ms. We approximate with a single interval that fires after
+    // hold + fade, which is long enough that the typewriter always finishes
+    // before the next phrase starts.
+    const id = setInterval(
+      () => setIndex((i) => (i + 1) % HERO_GREETING_CYCLE.length),
+      HOLD_MS + FADE_MS + 600,
+    );
     return () => clearInterval(id);
-  }, [reduceMotion, phrases.length]);
+  }, [reduceMotion]);
+
+  const phrase = HERO_GREETING_CYCLE[index];
 
   return (
     <div className="relative w-full">
@@ -130,7 +139,7 @@ export function HeroFallback({ role, variant }: { role: Role; variant: HeroVaria
         />
       ))}
 
-      {/* The headline with letter-staggered entrance and exit morph */}
+      {/* The headline with typewriter animation + hold + fade out */}
       <h1
         className="font-display font-bold leading-none tracking-[-0.04em] select-none relative"
         style={{ fontSize: 'clamp(48px, 12vw, 160px)' }}
@@ -148,48 +157,47 @@ export function HeroFallback({ role, variant }: { role: Role; variant: HeroVaria
         />
         <AnimatePresence mode="wait">
           <motion.span
-            key={phrases[index]}
+            key={phrase}
             className="inline-block relative text-text"
             initial={
               reduceMotion
                 ? { opacity: 1 }
-                : { opacity: 0, y: '0.4em', filter: 'blur(16px)' }
+                : { opacity: 0 }
             }
             animate={
               reduceMotion
                 ? { opacity: 1 }
                 : {
                     opacity: 1,
-                    y: 0,
-                    filter: 'blur(0px)',
                     transition: {
-                      duration: 0.7,
-                      ease: [0.16, 1, 0.3, 1],
-                      staggerChildren: 0.05,
+                      duration: 0.3,
+                      ease: 'easeOut',
+                      // Stagger each character so it types in 60ms/char.
+                      staggerChildren: 0.06,
+                      delayChildren: 0.05,
                     },
                   }
             }
             exit={
               reduceMotion
-                ? { opacity: 0 }
+                ? { opacity: 0, transition: { duration: 0.1 } }
                 : {
                     opacity: 0,
-                    y: '-0.4em',
-                    filter: 'blur(12px)',
-                    transition: { duration: 0.4, ease: 'easeIn' },
+                    filter: 'blur(8px)',
+                    transition: { duration: FADE_MS / 1000, ease: 'easeIn' },
                   }
             }
           >
-            {phrases[index].split('').map((ch, i) => (
+            {phrase.split('').map((ch, i) => (
               <motion.span
-                key={`${phrases[index]}-${i}`}
+                key={`${phrase}-${i}`}
                 className="inline-block"
-                initial={reduceMotion ? undefined : { opacity: 0, y: '0.6em' }}
-                animate={reduceMotion ? undefined : { opacity: 1, y: 0 }}
+                initial={reduceMotion ? { opacity: 1 } : { opacity: 0, y: '0.2em' }}
+                animate={reduceMotion ? { opacity: 1 } : { opacity: 1, y: 0 }}
                 transition={
                   reduceMotion
-                    ? undefined
-                    : { duration: 0.55, delay: i * 0.04, ease: [0.16, 1, 0.3, 1] }
+                    ? { duration: 0 }
+                    : { duration: 0.25, ease: [0.16, 1, 0.3, 1] }
                 }
               >
                 {ch}
