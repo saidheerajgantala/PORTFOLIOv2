@@ -2,39 +2,38 @@ import type { CareerStop } from '@/lib/types';
 
 export const CAREER: CareerStop[] = [
   {
-    id: 'epam-enterprise-agent',
-    period: '2022 — Present',
-    title: 'SDE2 — Enterprise Agent Platform',
+    id: 'epam-agent-platform',
+    period: 'Oct 2025 — Present',
+    title: 'System Engineer — Enterprise Agent Platform',
     company: 'EPAM Systems',
-    location: 'Remote / Global',
-    achievements: [
-      'Built the production agent platform shipping to enterprise clients',
-      'Designed RBAC and operator-in-the-loop patterns for long-running workflows',
-      'Cut runtime costs by 35% across multi-cloud deployments',
-    ],
-  },
-  {
-    id: 'cloud-platform-engineer',
-    period: '2020 — 2022',
-    title: 'Cloud Platform Engineer',
-    company: 'Series-B SaaS',
     location: 'Bengaluru, India',
     achievements: [
-      'Led migration from monolith to multi-cloud Kubernetes platform',
-      'Boot time reduced 70% via image optimization and aggressive caching',
-      'Owned CI/CD, observability, and on-call rotation for 20+ engineers',
+      'Building the enterprise AI agent platform — MCP integrations, agentic workflows, operator review loops.',
+      'Multi-tenant RBAC and role-based dashboards for developer self-service + operator approval flows.',
+      'Orchestrated long-running workflows on Temporal; LangGraph + Google ADK agents in production.',
     ],
   },
   {
-    id: 'backend-engineer',
-    period: '2018 — 2020',
-    title: 'Backend Engineer',
-    company: 'Product Studio',
+    id: 'premium-parking-xebia',
+    period: 'Jul 2023 — Sep 2025',
+    title: 'Software Engineer — Cloud, Data & DevOps',
+    company: 'Premium Parking (Xebia)',
     location: 'Hyderabad, India',
     achievements: [
-      'Shipped core APIs for two consumer products in the first year',
-      'Introduced async job processing that handled 10x prior throughput',
-      'Mentored two junior engineers through their first on-call rotations',
+      '30% revenue lift via end-to-end PostgreSQL→MSSQL data pipeline (AWS DMS + custom triggers powering BI).',
+      '35% AWS cost out via rightsizing + lifecycle automation (Lambda + CloudWatch Events); 65% provisioning time out via Terraform + AWS CDK.',
+      '70% fraud reduction via reCAPTCHA + AWS WAF; ELK + Elastic APM cut MTTD/MTTR by 30%.',
+    ],
+  },
+  {
+    id: 'xebia-intern',
+    period: 'Mar 2022 — Jun 2022',
+    title: 'Engineer Intern',
+    company: 'Xebia',
+    location: 'Hyderabad, India',
+    achievements: [
+      'Tripled deployment frequency via GitHub Actions CI/CD; containerized apps, 30% deploy-time reduction.',
+      'Hands-on Go, Docker, Java, Rails, Python, AWS, GCP across backend and cloud projects.',
     ],
   },
 ];
