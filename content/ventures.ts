@@ -2,14 +2,26 @@ import type { Venture } from '@/lib/types';
 
 export const VENTURES: Venture[] = [
   {
-    slug: 'noxtag',
-    name: 'Noxtag',
-    role: 'Founder',
+    slug: 'hiiired',
+    name: 'Hiiired',
+    role: 'Solo builder',
     period: '2024 — Present',
     status: 'active',
-    tagline: 'Privacy-first NFC tags that route to anything you choose. Built for the post-QR era.',
-    href: 'https://noxtag.example.com',
-    tags: ['NFC', 'Hardware', 'Privacy'],
+    tagline:
+      'AI-powered recruitment: resume tailoring, job matching, authentication, workflows.',
+    href: 'https://www.hiiired.cv/',
+    tags: ['FastAPI', 'Next.js', 'RAG', 'OpenAI', 'CrewAI'],
+  },
+  {
+    slug: 'noxstack',
+    name: 'Noxstack',
+    role: 'Solo builder',
+    period: '2024 — Present',
+    status: 'active',
+    tagline:
+      'Community-driven local service discovery — find and book neighborhood pros.',
+    href: 'https://www.noxstack.com/',
+    tags: ['FastAPI', 'PostgreSQL', 'AWS', 'Terraform', 'LangChain'],
   },
   {
     slug: 'wedaa',
@@ -17,18 +29,9 @@ export const VENTURES: Venture[] = [
     role: 'Co-founder',
     period: '2023 — Present',
     status: 'active',
-    tagline: 'Workspace for distributed agent architectures. Plan, deploy, and observe multi-agent systems.',
-    href: 'https://wedaa.example.com',
-    tags: ['Agents', 'DevTools', 'LangGraph'],
-  },
-  {
-    slug: 'jobharvester',
-    name: 'JobHarvester',
-    role: 'Solo builder',
-    period: '2023',
-    status: 'paused',
-    tagline: 'Aggregator that turns scattered job listings into a single ranked feed with skill-gap analysis.',
-    href: 'https://jobharvester.example.com',
-    tags: ['Python', 'Postgres', 'Search'],
+    tagline:
+      'Cloud-native app prototyping + backend code generation. Scaffold to deploy in minutes.',
+    href: 'https://www.wedaa.tech/',
+    tags: ['Spring Boot', 'Terraform', 'Kubernetes', 'AWS'],
   },
 ];
