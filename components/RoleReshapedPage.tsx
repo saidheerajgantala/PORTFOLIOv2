@@ -9,7 +9,6 @@ import { VenturePortfolio } from '@/components/sections/VenturePortfolio';
 import { MultiCloud } from '@/components/sections/MultiCloud';
 import { Principles } from '@/components/sections/Principles';
 import { Recognition } from '@/components/sections/Recognition';
-import { Writing } from '@/components/sections/Writing';
 import { Contact } from '@/components/sections/Contact';
 
 interface SectionProps {
@@ -25,7 +24,6 @@ function SectionById({ id, index, total }: { id: SectionId; index: number; total
     case 'multi-cloud': return <MultiCloud index={index} total={total} />;
     case 'principles': return <Principles index={index} total={total} />;
     case 'recognition': return <Recognition index={index} total={total} />;
-    case 'writing': return <Writing index={index} total={total} />;
     case 'contact': return <Contact index={index} total={total} />;
     default:
       // hero and other non-resolved IDs handled elsewhere

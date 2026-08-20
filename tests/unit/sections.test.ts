@@ -2,9 +2,9 @@ import { describe, it, expect } from 'vitest';
 import { SECTION_ORDER, ROLE_LABELS } from '@/content/sections';
 
 describe('SECTION_ORDER', () => {
-  it('every role has 9 sections', () => {
+  it('every role has 8 sections', () => {
     for (const order of Object.values(SECTION_ORDER)) {
-      expect(order).toHaveLength(9);
+      expect(order).toHaveLength(8);
     }
   });
 

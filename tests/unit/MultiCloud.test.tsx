@@ -9,10 +9,9 @@ describe('MultiCloud', () => {
     expect(screen.getByRole('heading', { name: /multi-cloud devops/i })).toBeInTheDocument();
   });
 
-  it('renders all three cloud providers', () => {
-    render(<MultiCloud index={6} total={9} />);
+  it('renders AWS and Azure', () => {
+    render(<MultiCloud index={6} total={8} />);
     expect(screen.getByRole('heading', { name: 'AWS' })).toBeInTheDocument();
-    expect(screen.getByRole('heading', { name: 'GCP' })).toBeInTheDocument();
     expect(screen.getByRole('heading', { name: 'Azure' })).toBeInTheDocument();
   });
 });

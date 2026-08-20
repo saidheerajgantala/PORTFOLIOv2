@@ -10,9 +10,17 @@ interface CurrentBuild {
 
 const BUILDS: CurrentBuild[] = [
   {
-    name: 'Enterprise Agent Platform',
-    description: 'Production agent platform shipping to enterprise clients. LangGraph orchestration, Temporal for durable execution, RCA system for incident triage.',
-    stack: ['LangGraph', 'Temporal', 'LangSmith', 'Python'],
+    name: 'Enterprise Agent Platform @ EPAM',
+    description:
+      'MCP-integrated agent workflows, multi-tenant RBAC, Temporal orchestration, LangGraph + Google ADK agents. Operator review and approval loops built in.',
+    stack: ['Python', 'FastAPI', 'LangGraph', 'Temporal', 'Google ADK', 'Backstage'],
+    status: 'active',
+  },
+  {
+    name: 'Hiiired + Noxstack (personal)',
+    description:
+      'AI-powered recruiting (RAG + CrewAI) and community local-service discovery (FastAPI + LangChain). Solo weekend builds.',
+    stack: ['FastAPI', 'Next.js', 'RAG', 'OpenAI', 'LangChain'],
     status: 'active',
   },
 ];

@@ -9,7 +9,6 @@ export const SECTION_IDS = [
   'ventures',
   'multi-cloud',
   'principles',
-  'writing',
   'contact',
 ] as const;
 export type SectionId = (typeof SECTION_IDS)[number];
@@ -49,5 +48,5 @@ export interface CaseStudyMeta {
   period: string;
   role: string;
   stack: string[];
-  impact: ImpactMetric[];
+  impact?: ImpactMetric[];
 }

@@ -95,7 +95,7 @@ export function Contact({ index, total }: { index: number; total: number }) {
           </div>
           {status === 'error' && (
             <p role="alert" className="text-accent font-mono text-xs uppercase tracking-widest">
-              Something went wrong. Email me directly at hello@example.com.
+              Something went wrong. Email me directly at gantala.saidheeraj@gmail.com.
             </p>
           )}
           <Button type="submit" disabled={status === 'submitting'}>

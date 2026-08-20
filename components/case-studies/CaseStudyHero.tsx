@@ -27,14 +27,16 @@ export function CaseStudyHero({ meta }: { meta: CaseStudyMeta }) {
           </dd>
         </div>
       </dl>
-      <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border pt-6">
-        {meta.impact.map((m) => (
-          <div key={m.label}>
-            <div className="font-display text-4xl text-accent">{m.value}</div>
-            <div className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">{m.label}</div>
-          </div>
-        ))}
-      </div>
+      {meta.impact && meta.impact.length > 0 && (
+        <div className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-6 border-t border-border pt-6">
+          {meta.impact.map((m) => (
+            <div key={m.label}>
+              <div className="font-display text-4xl text-accent">{m.value}</div>
+              <div className="mt-2 font-mono text-xs uppercase tracking-widest text-muted">{m.label}</div>
+            </div>
+          ))}
+        </div>
+      )}
     </header>
   );
 }

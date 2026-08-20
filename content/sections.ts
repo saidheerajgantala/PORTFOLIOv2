@@ -3,19 +3,19 @@ import type { Role, SectionId } from '@/lib/types';
 export const SECTION_ORDER: Record<Role, SectionId[]> = {
   recruiter: [
     'hero', 'recognition', 'currently-building', 'career-arc',
-    'ventures', 'multi-cloud', 'principles', 'writing', 'contact',
+    'ventures', 'multi-cloud', 'principles', 'contact',
   ],
   peer: [
     'hero', 'career-arc', 'currently-building', 'multi-cloud',
-    'ventures', 'principles', 'recognition', 'writing', 'contact',
+    'ventures', 'principles', 'recognition', 'contact',
   ],
   founder: [
     'hero', 'ventures', 'currently-building', 'career-arc',
-    'multi-cloud', 'principles', 'recognition', 'writing', 'contact',
+    'multi-cloud', 'principles', 'recognition', 'contact',
   ],
   client: [
     'hero', 'multi-cloud', 'principles', 'ventures',
-    'career-arc', 'currently-building', 'recognition', 'writing', 'contact',
+    'career-arc', 'currently-building', 'recognition', 'contact',
   ],
 };
 
