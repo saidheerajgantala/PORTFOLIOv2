@@ -1,6 +1,6 @@
 import { SectionNumber } from '@/components/layout/SectionNumber';
 
-type Kind = 'award' | 'cert';
+type Kind = 'award';
 
 interface Item {
   kind: Kind;
@@ -10,9 +10,9 @@ interface Item {
   href?: string;
 }
 
-// All entries sourced from resume.txt — Awards + Certifications sections.
+// All entries sourced from resume.txt — Awards section only.
+// Certifications live in their own component.
 const ITEMS: Item[] = [
-  // Awards
   {
     kind: 'award',
     title: 'GEM Award — Xebia',
@@ -33,39 +33,6 @@ const ITEMS: Item[] = [
     title: 'Cipher Combat 3.0 — 17th place',
     period: 'Jan 2020',
     body: 'National-level CTF-style competition.',
-  },
-  // Certifications
-  {
-    kind: 'cert',
-    title: 'AWS Certified Machine Learning Engineer — Associate',
-    period: 'Jan 2025',
-    body: 'Issued by Amazon Web Services.',
-  },
-  {
-    kind: 'cert',
-    title: 'AWS Certified DevOps Engineer — Professional',
-    period: 'Jan 2025',
-    body: 'Issued by Amazon Web Services.',
-    href: 'https://www.credly.com/badges/beaba153-e27f-4e66-ae75-adb1d8b9810b/public_url',
-  },
-  {
-    kind: 'cert',
-    title: 'Ethical Hacker — Cisco',
-    period: 'Jan 2025',
-    body: 'Issued by Cisco.',
-  },
-  {
-    kind: 'cert',
-    title: 'Google Professional Cloud Architect',
-    period: 'Jan 2024',
-    body: 'Issued by Google.',
-    href: 'https://www.credly.com/badges/1ffec24f-c758-4b83-abac-ca1218ff6b11',
-  },
-  {
-    kind: 'cert',
-    title: 'Infosys Certified Software Programmer',
-    period: 'Jan 2022',
-    body: 'Issued by Infosys.',
   },
 ];
 
