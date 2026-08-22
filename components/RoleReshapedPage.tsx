@@ -4,6 +4,7 @@ import { useWhoAmI } from '@/components/entry/whoami-store';
 import { SECTION_ORDER } from '@/content/sections';
 import type { SectionId } from '@/lib/types';
 import { CareerArc } from '@/components/sections/CareerArc';
+import { Certifications } from '@/components/sections/Certifications';
 import { CurrentlyBuilding } from '@/components/sections/CurrentlyBuilding';
 import { VenturePortfolio } from '@/components/sections/VenturePortfolio';
 import { MultiCloud } from '@/components/sections/MultiCloud';
@@ -24,6 +25,7 @@ function SectionById({ id, index, total }: { id: SectionId; index: number; total
     case 'multi-cloud': return <MultiCloud index={index} total={total} />;
     case 'principles': return <Principles index={index} total={total} />;
     case 'recognition': return <Recognition index={index} total={total} />;
+    case 'certifications': return <Certifications index={index} total={total} />;
     case 'contact': return <Contact index={index} total={total} />;
     default:
       // hero and other non-resolved IDs handled elsewhere
