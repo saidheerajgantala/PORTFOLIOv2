@@ -1,0 +1,120 @@
+Name: Gantala Sai Dheeraj
+Email: gantala.saidheeraj@gmail.com
+Phone: +91 91009 44342
+Location: Bengaluru, Karnataka, India
+Website: https://saidheerajgantala.me/
+
+Professional Summary:
+Software Engineer with 4+ years of experience building cloud-native applications, enterprise AI platforms, backend systems, and engineering automation. Currently working as a System Engineer at EPAM Systems, building an enterprise-grade platform for managing AI agents, Model Context Protocol (MCP) integrations, and agentic workflows that bridge AI capabilities with engineering automation and managed services.
+
+Experienced in designing scalable backend systems, developer platforms, data integration pipelines, multi-tenant architectures, RBAC, and workflow orchestration using technologies including Python, FastAPI, AWS, Terraform, Kubernetes, Temporal, Backstage, LangGraph, and Google ADK.
+
+Previously worked at Premium Parking – Xebia, where I led cloud infrastructure, application modernization, observability, security, data integration, and AI initiatives across AWS and Azure. Strong background in Infrastructure as Code, DevOps, distributed systems, microservices, RAG, LLM applications, and AI-driven automation.
+
+Work Experience:
+System Engineer — EPAM Systems
+October 2025 - Present
+Bengaluru, India
+Technologies: Python, FastAPI, AWS, Terraform, Kubernetes, Temporal, Backstage, LangGraph, Google ADK
+Key Bullet Points:
+- Building an enterprise-grade AI platform for managing AI agents, Model Context Protocol (MCP) integrations, and agentic workflows, bridging AI capabilities with engineering automation and managed services.
+- Developed data integration pipelines, multi-tenant RBAC, and role-based dashboards enabling developers to create and execute workflows while allowing operators to review, manage, and approve requests.
+- Built and customized Backstage developer portals and Software Templates, integrating enterprise engineering tools including Jenkins, Jira, Vault, and internal services to provide a unified developer experience.
+- Designed and orchestrated complex engineering workflows using Temporal, enabling reliable execution of long-running and multi-step automation processes.
+- Designed AI-powered automation pipelines, including a Root Cause Analysis (RCA) system, to automate complex engineering troubleshooting and operational tasks.
+- Built multi-step agentic workflows using LangGraph and Google ADK, enabling AI agents to reason across tasks, interact with engineering systems, and automate operational workflows.
+- Integrated AI agents, MCP-based tool interactions, and engineering automation into enterprise workflows to improve operational efficiency and reduce manual intervention.
+
+Software Engineer — Premium Parking – Xebia
+July 2023 - September 2025
+Hyderabad, India
+Technologies: AWS PostgreSQL, Azure MSSQL, AWS DMS, Terraform, AWS CDK, CloudWatch, ELK, Elastic APM
+Key Bullet Points:
+- Led the development of an end-to-end data pipeline integrating AWS PostgreSQL with Azure MSSQL using AWS DMS and custom triggers, enabling near real-time BI dashboards and increasing revenue by 30%.
+- Automated database backup and restore workflows using Bash scripts and parallel processing, reducing manual setup time by 80% and improving system performance by 40%.
+- Developed CloudWatch Insights queries and configured reCAPTCHA with AWS WAF to reduce fraudulent activity by 70%.
+- Created scalable Infrastructure-as-Code pipelines with Terraform and AWS CDK, reducing provisioning time by 65%.
+- Reduced AWS costs by 35% through resource audits, rightsizing, and automated lifecycle management using Lambda and CloudWatch Events.
+- Integrated AWS Cognito with Ruby on Rails and Azure AD (OIDC) for Single Sign-On.
+- Designed CloudWatch dashboards and integrated the ELK Stack with Elastic APM, reducing MTTD and MTTR by 30%.
+- Built an LLM-powered RAG chatbot backed by a Vector Database, improving onboarding and increasing team productivity by 20%.
+
+Associate Software Engineer — Premium Parking – Xebia
+July 2022 - June 2023
+Hyderabad, India
+Technologies: Hasura, GraphQL, React.js, Python, AWS Lambda, ECS
+Key Bullet Points:
+- Decoupled a monolithic architecture into microservices using Hasura GraphQL and React.js.
+- Migrated Sidekiq background jobs to AWS Lambda using Python, reducing memory usage by 30% and increasing concurrency.
+- Reduced application startup time by 70% through lazy loading, dependency optimization, and code splitting.
+- Deployed the ELK Stack for real-time log analysis, anomaly detection, and alerting, reducing critical incidents by 70%.
+- Implemented ECS auto-scaling policies based on CPU and memory utilization, reducing cloud costs by 30%.
+- Resolved 90% of P1 incidents within four hours using structured incident response and root cause analysis.
+- Led migration of Ruby on Rails applications and PostgreSQL databases from Heroku to AWS using more than 15 AWS services with zero downtime.
+
+Engineer Intern — Xebia
+March 2022 - June 2022
+Hyderabad, India
+Automated CI/CD with GitHub Actions, tripling deployment frequency.
+Technologies: GitHub Actions
+Key Bullet Points:
+- Gained backend development experience with Go and AWS.
+- Automated CI/CD using GitHub Actions, tripling deployment frequency.
+- Dockerized applications and introduced deployment validation, reducing deployment time by 30%.
+- Contributed to backend and cloud projects using Docker, Java, Rails, Python, AWS, and GCP.
+
+
+Education:
+B.Tech, Computer Science & Engineering — CMR Institute of Technology
+January 2018 - January 2022
+
+
+Skills:
+AI: AI Agents, LLMs, SLMs, MCP, RAG, OpenAI, Ollama, LangChain, LangGraph, CrewAI, Google ADK, Prompt Engineering, Vector DBs
+Development: Python, Go, Java, Ruby on Rails, FastAPI, React.js, Next.js
+Cloud/DevOps: AWS, Azure, GCP, Kubernetes, Docker, Terraform, AWS CDK, CloudFormation, GitHub Actions, Jenkins, Linux
+Platform/Automation: Backstage, Software Templates, Temporal, Jira, Vault, CI/CD, Workflow Automation
+Architecture: System Design, Microservices, Distributed Systems, Multi-Tenant Architecture, RBAC, IaC
+Data/Observability: PostgreSQL, MySQL, MongoDB, Aurora RDS, CloudWatch, Prometheus, Grafana, ELK, Elastic APM
+
+Projects:
+Hiiired
+URL: https://www.hiiired.cv/
+AI-powered recruitment platform for resume tailoring, job matching, authentication, and workflows.
+Technologies: FastAPI, Next.js, RAG, OpenAI, CrewAI
+
+Noxstack
+URL: https://www.noxstack.com/
+Community-driven local service discovery platform.
+Technologies: FastAPI, PostgreSQL, AWS, Terraform, LangChain
+
+WeDAA
+URL: https://www.wedaa.tech/
+Cloud-native application prototyping and backend code generation platform.
+Technologies: Spring Boot, Terraform, Kubernetes, AWS
+
+
+Certifications:
+AWS Certified ML Engineer — Amazon Web Services
+Issued: January 2025
+AWS Certified DevOps Engineer – Professional — Amazon Web Services
+Issued: January 2025
+URL: https://www.credly.com/badges/beaba153-e27f-4e66-ae75-adb1d8b9810b/public_url
+Ethical Hacker — Cisco
+Issued: January 2025
+Google Professional Cloud Architect — Google
+Issued: January 2024
+URL: https://www.credly.com/badges/1ffec24f-c758-4b83-abac-ca1218ff6b11
+Infosys Certified Software Programmer — Infosys
+Issued: January 2022
+
+Awards:
+GEM Award — Xebia
+Date: January 2024
+URL: https://media.licdn.com/dms/image/v2/D562DAQFNqIwJgaZG6Q/profile-treasury-image-shrink_1280_1280/profile-treasury-image-shrink_1280_1280/0/1738944384902?e=1787774400&v=beta&t=2-P3DZbo4K2OBfB05jVQmtwV11_4wu0vYuJ5dHir9Fo
+Hall of Fame — BigBasket
+Date: January 2022
+URL: https://tech.bigbasket.com/security-at-bigbasket-5eaaa6fa7c89
+Cipher Combat 3.0 — 
+Date: January 2020
+17th place
