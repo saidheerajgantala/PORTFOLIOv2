@@ -1,15 +1,5 @@
 import type { Role } from '@/lib/types';
 
-// Single greeting cycle used for every role — the original five phrases.
-// Kept short on purpose so the particle text sampler can render them legibly.
-export const HERO_GREETING_CYCLE: readonly string[] = [
-  'Hello.',
-  'Hi.',
-  'Hey.',
-  'Namaste.',
-  'Howdy.',
-];
-
 export interface HeroVariant {
   sub: string;   // role-aware subhead under the headline
   cta: string;   // role-aware CTA label
