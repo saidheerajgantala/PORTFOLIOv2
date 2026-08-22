@@ -8,8 +8,8 @@ describe('types', () => {
     expect(ROLES).toEqual(['recruiter', 'peer', 'founder', 'client']);
   });
 
-  it('SectionId has 8 members', () => {
-    expect(SECTION_IDS).toHaveLength(8);
+  it('SectionId has 9 members', () => {
+    expect(SECTION_IDS).toHaveLength(9);
     expect(SECTION_IDS).toEqual([
       'hero',
       'recognition',
@@ -17,6 +17,7 @@ describe('types', () => {
       'career-arc',
       'ventures',
       'multi-cloud',
+      'certifications',
       'principles',
       'contact',
     ]);

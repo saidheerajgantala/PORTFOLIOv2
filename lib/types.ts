@@ -8,6 +8,7 @@ export const SECTION_IDS = [
   'career-arc',
   'ventures',
   'multi-cloud',
+  'certifications',
   'principles',
   'contact',
 ] as const;
@@ -49,4 +50,12 @@ export interface CaseStudyMeta {
   role: string;
   stack: string[];
   impact?: ImpactMetric[];
+}
+
+export interface CertificationMeta {
+  slug: string;
+  title: string;
+  issuer: string;
+  issued: string;     // ISO YYYY-MM
+  href?: string;
 }
