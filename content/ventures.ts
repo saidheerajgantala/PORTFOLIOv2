@@ -15,7 +15,7 @@ export const VENTURES: Venture[] = [
   {
     slug: 'noxstack',
     name: 'Noxstack',
-    role: 'Solo builder',
+    role: 'Co-founder',
     period: '2024 — Present',
     status: 'active',
     tagline:
@@ -26,7 +26,7 @@ export const VENTURES: Venture[] = [
   {
     slug: 'wedaa',
     name: 'WeDAA',
-    role: 'Co-founder',
+    role: 'Founding engineer',
     period: '2023 — Present',
     status: 'active',
     tagline:
