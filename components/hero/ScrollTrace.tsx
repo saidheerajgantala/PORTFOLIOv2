@@ -1,7 +1,7 @@
 'use client';
 
 import { useEffect, useRef, useState } from 'react';
-import { motion } from 'motion/react';
+import { motion, useMotionValue, useSpring, useTransform } from 'motion/react';
 import { type Role, type SectionId } from '@/lib/types';
 import { SECTION_ORDER } from '@/content/sections';
 import { useReducedMotion } from '@/components/hooks/useReducedMotion';
@@ -12,30 +12,61 @@ interface ScrollTraceProps {
 
 /**
  * Fixed-position scroll indicator pinned to the left edge.
- * A single ball that animates between section positions as the user scrolls —
- * snapping to whichever section currently dominates the viewport.
  *
- * Section positions are evenly distributed along the trace's full height
- * (matching the order this role sees on the page).
+ * The ball's vertical position is driven by the page's continuous scroll
+ * fraction (0 = top of page, 1 = bottom of page), not by a discrete section
+ * index. A spring layer smooths the raw scroll value and adds a soft
+ * follow-delay (stiffness: 90 / damping: 26 / mass: 0.8) — buttery rather
+ * than snappy.
+ *
+ * Tick marks at each section position act as visual landmarks; the ball
+ * glides past them as the user scrolls between sections.
  *
  * Honors prefers-reduced-motion: ball jumps without spring.
  */
 export function ScrollTrace({ role }: ScrollTraceProps) {
   const [activeIdx, setActiveIdx] = useState(0);
   const reduce = useReducedMotion();
-  const orderRef = useRef<SectionId[]>([]);
 
   // Order sections per role (hero first, then role-specific tail).
   const order: SectionId[] = [
     'hero',
     ...SECTION_ORDER[role].filter((id) => id !== 'hero'),
   ];
-  orderRef.current = order;
+  const totalSlots = order.length;
 
+  // Continuous scroll fraction across the full page: 0 at top → 1 at bottom.
+  const progress = useMotionValue(0);
+
+  // Spring layer — smooth follow with a subtle trailing feel.
+  // (Lower stiffness + higher mass = laggier. Tuned for "soft chase".)
+  const smooth = useSpring(progress, {
+    stiffness: 90,
+    damping: 26,
+    mass: 0.8,
+  });
+
+  // Map [0,1] → CSS `top` percentage so the ball travels the full rail.
+  const topPct = useTransform(smooth, (v) => `${v * 100}%`);
+
+  // Track active section index for tick-mark highlighting.
+  const orderRef = useRef<SectionId[]>(order);
+  orderRef.current = order;
   useEffect(() => {
     let raf = 0;
     const tick = () => {
       const orderNow = orderRef.current;
+
+      // Continuous page-scroll fraction.
+      const docH = Math.max(
+        document.documentElement.scrollHeight - window.innerHeight,
+        1
+      );
+      const frac = Math.min(1, Math.max(0, window.scrollY / docH));
+      progress.set(frac);
+
+      // Discrete active section for tick highlighting: last section whose
+      // top has scrolled past the 40% viewport line.
       const mid = window.scrollY + window.innerHeight * 0.4;
       let bestIdx = 0;
       for (let i = 0; i < orderNow.length; i++) {
@@ -45,6 +76,7 @@ export function ScrollTrace({ role }: ScrollTraceProps) {
         if (top <= mid) bestIdx = i;
       }
       setActiveIdx((prev) => (prev === bestIdx ? prev : bestIdx));
+
       raf = 0;
     };
     const onScroll = () => {
@@ -58,10 +90,11 @@ export function ScrollTrace({ role }: ScrollTraceProps) {
       window.removeEventListener('resize', onScroll);
       if (raf) cancelAnimationFrame(raf);
     };
-  }, [role]);
+  }, [role, progress]);
 
-  const totalSlots = order.length;
-  const activePct = totalSlots > 1 ? (activeIdx / (totalSlots - 1)) * 100 : 0;
+  // Discrete-snap position for reduced-motion users (no spring).
+  const snapPct =
+    totalSlots > 1 ? (activeIdx / (totalSlots - 1)) * 100 : 0;
 
   return (
     <div
@@ -92,21 +125,17 @@ export function ScrollTrace({ role }: ScrollTraceProps) {
         );
       })}
 
-      {/* Active ball — animates between section positions */}
+      {/* Active ball — smooth, delayed follow of scroll progress. */}
       <motion.div
         className="absolute left-0 right-0 flex items-center justify-center"
-        animate={{ top: `${activePct}%` }}
-        transition={
-          reduce
-            ? { duration: 0 }
-            : { type: 'spring', stiffness: 220, damping: 26, mass: 0.7 }
-        }
-        style={{ translateY: '-50%' }}
+        style={reduce ? { top: `${snapPct}%` } : { top: topPct }}
       >
         <span
           className="inline-block h-3 w-3 rounded-full bg-accent ring-4 ring-accent/25"
           style={{
-            boxShadow: '0 0 12px var(--accent), 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent)',
+            boxShadow:
+              '0 0 12px var(--accent), 0 0 0 4px color-mix(in oklab, var(--accent) 25%, transparent)',
+            transform: 'translateY(-50%)',
           }}
         />
       </motion.div>
