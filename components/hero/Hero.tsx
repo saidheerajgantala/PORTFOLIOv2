@@ -1,8 +1,15 @@
+'use client';
+
+import { AnimatePresence, motion } from 'motion/react';
 import { HeroReveal } from '@/components/hero/HeroReveal';
 import { MagneticChip } from '@/components/hero/MagneticChip';
 import { HERO_BIO } from '@/content/hero-bio';
 import { HERO_VARIANT } from '@/content/hero-variants';
 import type { Role } from '@/lib/types';
+
+function isExternal(href: string): boolean {
+  return /^https?:\/\//i.test(href) || /^mailto:/i.test(href);
+}
 
 export function Hero({ role }: { role: Role }) {
   const bio = HERO_BIO[role];
@@ -24,6 +31,7 @@ export function Hero({ role }: { role: Role }) {
             Backend Engineer · Agent Platforms · Bengaluru
           </h2>
 
+          {/* Inline bio + role-aware span chips */}
           <p
             className="mt-12 max-w-3xl text-text"
             style={{ fontSize: 'clamp(18px, 1.6vw, 22px)' }}
@@ -37,25 +45,37 @@ export function Hero({ role }: { role: Role }) {
             ))}
           </p>
 
-          <div className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.2em]">
-            <a
-              href="#contact"
-              className="text-text border-b-2 border-accent pb-1 hover:opacity-80"
-            >
-              {variant.cta}
-            </a>
-            <a
-              href="mailto:gantala.saidheeraj@gmail.com"
-              className="text-muted hover:text-text"
-            >
-              Available for platform engagements →
-            </a>
-            <a href="#career-arc" className="text-muted hover:text-text">
-              Currently @ EPAM
-            </a>
-            <a href="#currently-building" className="text-muted hover:text-text">
-              Notes on agent reliability
-            </a>
+          {/* Role-aware CTA strip — 4 buttons per role, 1 primary + 3 secondary */}
+          <div
+            key={role}
+            className="mt-10 flex flex-wrap items-center gap-x-6 gap-y-3 font-mono text-sm uppercase tracking-[0.2em]"
+          >
+            <AnimatePresence mode="wait" initial={false}>
+              {variant.ctas.map((cta, i) => {
+                const external = isExternal(cta.href);
+                return (
+                  <motion.a
+                    key={`${role}-${cta.label}`}
+                    href={cta.href}
+                    {...(external && {
+                      target: cta.href.startsWith('mailto:') ? undefined : '_blank',
+                      rel: 'noopener noreferrer',
+                    })}
+                    initial={{ opacity: 0, y: 6 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    exit={{ opacity: 0, y: -4 }}
+                    transition={{ duration: 0.22, delay: 0.04 * i }}
+                    className={
+                      cta.primary
+                        ? 'text-text border-b-2 border-accent pb-1 hover:opacity-80'
+                        : 'text-muted hover:text-text'
+                    }
+                  >
+                    {cta.label}
+                  </motion.a>
+                );
+              })}
+            </AnimatePresence>
           </div>
         </div>
       </HeroReveal>
