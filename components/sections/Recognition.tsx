@@ -10,8 +10,9 @@ interface Item {
   href?: string;
 }
 
-// All entries sourced from resume.txt — Awards section only.
-// Certifications live in their own component.
+// All entries from current recognition history.
+// Note: Cipher Combat is intentionally retained even though it was dropped from the
+// latest resume PDF — flagged as a CTF-style security recognition the user wants to keep.
 const ITEMS: Item[] = [
   {
     kind: 'award',
@@ -27,6 +28,12 @@ const ITEMS: Item[] = [
     period: 'Jan 2022',
     body: "Listed on BigBasket's security hall of fame for a disclosed vulnerability.",
     href: 'https://tech.bigbasket.com/security-at-bigbasket-5eaaa6fa7c89',
+  },
+  {
+    kind: 'award',
+    title: 'Cipher Combat 3.0 — 17th place',
+    period: 'Jan 2020',
+    body: 'National-level CTF-style competition.',
   },
 ];
 
