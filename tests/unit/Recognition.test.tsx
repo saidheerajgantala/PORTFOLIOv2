@@ -9,11 +9,11 @@ describe('Recognition', () => {
     expect(screen.getByRole('heading', { name: /^recognition$/i })).toBeInTheDocument();
   });
 
-  it('lists all 3 awards', () => {
+  it('lists both remaining awards (no Cipher Combat on latest resume)', () => {
     render(<Recognition index={2} total={9} />);
     expect(screen.getByText(/GEM Award — Xebia/i)).toBeInTheDocument();
     expect(screen.getByText(/Hall of Fame — BigBasket/i)).toBeInTheDocument();
-    expect(screen.getByText(/Cipher Combat/i)).toBeInTheDocument();
+    expect(screen.queryByText(/Cipher Combat/i)).not.toBeInTheDocument();
   });
 
   it('does not list any certification issuer', () => {

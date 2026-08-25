@@ -28,12 +28,6 @@ const ITEMS: Item[] = [
     body: "Listed on BigBasket's security hall of fame for a disclosed vulnerability.",
     href: 'https://tech.bigbasket.com/security-at-bigbasket-5eaaa6fa7c89',
   },
-  {
-    kind: 'award',
-    title: 'Cipher Combat 3.0 — 17th place',
-    period: 'Jan 2020',
-    body: 'National-level CTF-style competition.',
-  },
 ];
 
 export function Recognition({ index, total }: { index: number; total: number }) {
