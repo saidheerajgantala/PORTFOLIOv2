@@ -9,7 +9,7 @@ export default async function HomePage() {
   const name = await readNameFromCookies();
   return (
     <HomeShell initialRole={role} initialName={name}>
-      <Hero role={role} />
+      <Hero />
       <RoleReshapedPage />
       <Footer />
     </HomeShell>

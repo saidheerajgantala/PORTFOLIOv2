@@ -3,15 +3,19 @@
 import { AnimatePresence, motion } from 'motion/react';
 import { HeroReveal } from '@/components/hero/HeroReveal';
 import { MagneticChip } from '@/components/hero/MagneticChip';
+import { useWhoAmI } from '@/components/entry/whoami-store';
 import { HERO_BIO } from '@/content/hero-bio';
 import { HERO_VARIANT } from '@/content/hero-variants';
-import type { Role } from '@/lib/types';
 
 function isExternal(href: string): boolean {
   return /^https?:\/\//i.test(href) || /^mailto:/i.test(href);
 }
 
-export function Hero({ role }: { role: Role }) {
+export function Hero() {
+  // Read role from the client store so the hero re-renders immediately when
+  // the user re-edits the role via the WhoAmI modal (instead of staying frozen
+  // on whatever the server-rendered role was at request time).
+  const role = useWhoAmI((s) => s.role);
   const bio = HERO_BIO[role];
   const variant = HERO_VARIANT[role];
   return (
