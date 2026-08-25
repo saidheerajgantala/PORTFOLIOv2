@@ -11,7 +11,7 @@ export const HERO_SUBHEAD: Record<Role, string> = {
   recruiter:
     'System Engineer @ EPAM. 4+ years across cloud-native, data pipelines, and AI. Bengaluru.',
   peer:
-    'MCP · LangGraph · Temporal · Google ADK · Backstage · RBAC. Multi-tenant. Operator-in-the-loop.',
+    'MCP · LangGraph · Temporal · Google ADK · Kubernetes · Backstage · RBAC. Multi-tenant. Operator-in-the-loop.',
   founder:
     'Three shipped products. 30% revenue lift, 35% cost out, 80% backup-time out — outcomes, not slogans.',
   client:

@@ -17,6 +17,7 @@ export const HERO_BIO: Record<Role, HeroBio> = {
     spans: [
       { label: 'EPAM',         href: '#career-arc' },
       { label: 'Bengaluru',    href: '#career-arc' },
+      { label: '7 certs',      href: '#certifications' },
       { label: 'AWS',          href: '#multi-cloud' },
       { label: 'LangGraph',    href: '#currently-building' },
       { label: '30% rev lift', href: '#career-arc' },
@@ -25,10 +26,11 @@ export const HERO_BIO: Record<Role, HeroBio> = {
   peer: {
     intro: 'Building agent platforms with',
     spans: [
+      { label: 'MCP',          href: '#currently-building' },
       { label: 'LangGraph',    href: '#currently-building' },
       { label: 'Temporal',     href: '#currently-building' },
       { label: 'Google ADK',   href: '#currently-building' },
-      { label: 'RBAC',         href: '#currently-building' },
+      { label: 'Kubernetes',   href: '#currently-building' },
       { label: 'Backstage',    href: '#currently-building' },
     ],
   },

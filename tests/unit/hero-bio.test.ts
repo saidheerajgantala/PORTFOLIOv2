@@ -36,4 +36,17 @@ describe('HERO_BIO', () => {
     const intros = new Set(ROLES.map((r) => HERO_BIO[r].intro));
     expect(intros.size).toBe(ROLES.length);
   });
+
+  it('peer bio surfaces MCP, Kubernetes, and LangGraph (latest resume stack)', () => {
+    const labels = HERO_BIO.peer.spans.map((s) => s.label);
+    expect(labels).toContain('MCP');
+    expect(labels).toContain('Kubernetes');
+    expect(labels).toContain('LangGraph');
+  });
+
+  it('recruiter bio mentions 7 certs (was 5)', () => {
+    const labels = HERO_BIO.recruiter.spans.map((s) => s.label);
+    // Surface count as accent so a recruiter sees the breadth of certification
+    expect(labels.some((l) => /7 certs|7 certifications/i.test(l))).toBe(true);
+  });
 });
