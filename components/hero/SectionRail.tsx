@@ -1,13 +1,14 @@
 'use client';
 
-import { useEffect, useState, useCallback } from 'react';
-import { SECTION_IDS } from '@/lib/types';
+import { useEffect, useState, useCallback, useMemo } from 'react';
+import { SECTION_IDS, type Role, type SectionId } from '@/lib/types';
+import { SECTION_ORDER } from '@/content/sections';
 import { cn } from '@/lib/utils';
 import { useReducedMotion } from '@/components/hooks/useReducedMotion';
 
-// Display label for each section id, in the order they appear in the page.
+// Display label for each section id.
 // (Kept in sync with SECTION_IDS in lib/types.ts.)
-const SECTION_LABELS: Record<(typeof SECTION_IDS)[number], string> = {
+const SECTION_LABELS: Record<SectionId, string> = {
   'hero': 'Hero',
   'career-arc': 'Career arc',
   'currently-building': 'Currently building',
@@ -20,25 +21,28 @@ const SECTION_LABELS: Record<(typeof SECTION_IDS)[number], string> = {
 };
 
 interface SectionRailProps {
-  // Which section is the rail currently highlighting (controlled by IntersectionObserver)
-  // When undefined, the rail will detect on its own.
-  initialActive?: (typeof SECTION_IDS)[number];
+  role: Role;
+  initialActive?: SectionId;
 }
 
-export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
-  const [active, setActive] = useState<(typeof SECTION_IDS)[number]>(initialActive);
+export function SectionRail({ role, initialActive = 'hero' }: SectionRailProps) {
+  // Order the rail items by the role's SECTION_ORDER (excluding 'hero' since the
+  // rail only makes sense for content sections; 'hero' is always item §01).
+  const order = useMemo<SectionId[]>(() => {
+    const tail = SECTION_ORDER[role].filter((id) => id !== 'hero');
+    return ['hero', ...tail];
+  }, [role]);
+
+  const [active, setActive] = useState<SectionId>(initialActive);
   const reduce = useReducedMotion();
 
   useEffect(() => {
-    // Track which section is most in view using IntersectionObserver
-    const observers: IntersectionObserver[] = [];
     const sectionEls = SECTION_IDS
       .map((id) => document.getElementById(id))
       .filter((el): el is HTMLElement => el !== null);
 
     if (sectionEls.length === 0) return;
 
-    // Keep track of intersection ratios to pick the section with the highest visibility
     const ratios = new Map<string, number>();
 
     const observer = new IntersectionObserver(
@@ -46,7 +50,6 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
         for (const entry of entries) {
           ratios.set(entry.target.id, entry.intersectionRatio);
         }
-        // Pick the section with the highest visible ratio
         let bestId: string | null = null;
         let bestRatio = 0;
         for (const [id, ratio] of ratios) {
@@ -56,28 +59,21 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
           }
         }
         if (bestId && bestRatio > 0) {
-          setActive(bestId as (typeof SECTION_IDS)[number]);
+          setActive(bestId as SectionId);
         }
       },
       {
-        // Trigger when section crosses into upper-third of viewport — feels natural
         rootMargin: '-20% 0px -60% 0px',
         threshold: [0, 0.25, 0.5, 0.75, 1],
       }
     );
 
-    for (const el of sectionEls) {
-      observer.observe(el);
-    }
-    observers.push(observer);
-
-    return () => {
-      for (const o of observers) o.disconnect();
-    };
+    for (const el of sectionEls) observer.observe(el);
+    return () => observer.disconnect();
   }, []);
 
   const handleClick = useCallback(
-    (e: React.MouseEvent<HTMLAnchorElement>, id: (typeof SECTION_IDS)[number]) => {
+    (e: React.MouseEvent<HTMLAnchorElement>, id: SectionId) => {
       const target = document.getElementById(id);
       if (!target) return;
       e.preventDefault();
@@ -85,7 +81,6 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
         behavior: reduce ? 'auto' : 'smooth',
         block: 'start',
       });
-      // Update the URL hash without triggering a scroll jump
       history.replaceState(null, '', `#${id}`);
       setActive(id);
     },
@@ -98,7 +93,7 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
       className="hidden md:block fixed right-6 top-1/2 -translate-y-1/2 z-40"
     >
       <ol className="flex flex-col gap-3 font-mono text-xs uppercase tracking-[0.2em]">
-        {SECTION_IDS.map((id, i) => {
+        {order.map((id, i) => {
           const isActive = id === active;
           return (
             <li key={id}>
@@ -111,7 +106,6 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
                   isActive ? 'text-text' : 'text-muted hover:text-text'
                 )}
               >
-                {/* Label slides in on hover/active */}
                 <span
                   className={cn(
                     'overflow-hidden transition-all duration-300 whitespace-nowrap',
@@ -122,7 +116,6 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
                 >
                   {SECTION_LABELS[id]}
                 </span>
-                {/* The §NN marker is always visible */}
                 <span
                   className={cn(
                     'transition-all duration-200',
@@ -133,7 +126,6 @@ export function SectionRail({ initialActive = 'hero' }: SectionRailProps) {
                 >
                   §{String(i + 1).padStart(2, '0')}
                 </span>
-                {/* The vertical bar marker — accent when active */}
                 <span
                   aria-hidden="true"
                   className={cn(

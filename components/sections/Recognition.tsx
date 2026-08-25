@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import { SectionNumber } from '@/components/layout/SectionNumber';
+import { cn } from '@/lib/utils';
 
 type Kind = 'award';
 
@@ -38,6 +42,8 @@ const ITEMS: Item[] = [
 ];
 
 export function Recognition({ index, total }: { index: number; total: number }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(null);
+
   return (
     <section
       id="recognition"
@@ -48,23 +54,71 @@ export function Recognition({ index, total }: { index: number; total: number }) 
       <h2 id="recognition-heading" className="mt-4 font-display text-4xl text-text">
         Recognition
       </h2>
-      <ul className="mt-12 space-y-8">
-        {ITEMS.map((item) => {
-          const TitleTag = item.href ? 'a' : 'h3';
+      <ul className="mt-12 space-y-6">
+        {ITEMS.map((item, idx) => {
+          const isOpen = openIdx === idx;
           return (
-            <li key={item.title} className="border-l border-border pl-6">
-              <p className="font-mono text-xs uppercase tracking-widest text-muted">
-                {item.kind} · {item.period}
-              </p>
-              <TitleTag
-                {...(item.href
-                  ? { href: item.href, target: '_blank', rel: 'noopener noreferrer' }
-                  : {})}
-                className="mt-2 font-display text-xl text-text hover:text-accent"
+            <li
+              key={item.title}
+              className={cn(
+                'group relative border border-border transition-all duration-300',
+                'hover:-translate-y-1 hover:border-accent hover:shadow-[0_4px_24px_-8px_var(--accent)]',
+                isOpen && 'border-accent'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenIdx(isOpen ? null : idx)}
+                aria-expanded={isOpen}
+                className="w-full text-left p-6"
               >
-                {item.title}
-              </TitleTag>
-              <p className="mt-2 text-text">{item.body}</p>
+                <div className="flex items-start justify-between gap-4">
+                  <div>
+                    <p className="font-mono text-xs uppercase tracking-widest text-muted">
+                      {item.kind} · {item.period}
+                    </p>
+                    <h3
+                      className={cn(
+                        'mt-2 font-display text-xl transition-colors',
+                        isOpen ? 'text-accent' : 'text-text group-hover:text-accent'
+                      )}
+                    >
+                      {item.title}
+                    </h3>
+                  </div>
+                  <span
+                    aria-hidden="true"
+                    className={cn(
+                      'mt-1 inline-block font-mono text-xs text-muted transition-transform duration-300',
+                      isOpen && 'rotate-180 text-accent'
+                    )}
+                  >
+                    ↓
+                  </span>
+                </div>
+              </button>
+              <div
+                className={cn(
+                  'grid transition-all duration-300 ease-out',
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                )}
+              >
+                <div className="overflow-hidden">
+                  <div className="px-6 pb-6 pt-2 border-t border-border">
+                    <p className="text-text">{item.body}</p>
+                    {item.href && (
+                      <a
+                        href={item.href}
+                        target="_blank"
+                        rel="noopener noreferrer"
+                        className="mt-4 inline-block font-mono text-xs uppercase tracking-widest text-accent hover:underline"
+                      >
+                        View source →
+                      </a>
+                    )}
+                  </div>
+                </div>
+              </div>
             </li>
           );
         })}

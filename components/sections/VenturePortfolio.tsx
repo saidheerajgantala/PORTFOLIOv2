@@ -20,7 +20,7 @@ export function VenturePortfolio({ index, total }: { index: number; total: numbe
         {VENTURES.map((v) => (
           <article
             key={v.slug}
-            className="border border-border p-6 transition hover:border-accent"
+            className="group relative border border-border p-6 transition-all duration-300 hover:-translate-y-1 hover:border-accent hover:shadow-[0_4px_24px_-8px_var(--accent)]"
           >
             <div className="flex items-start justify-between gap-3">
               <h3 className="font-display text-2xl text-text">{v.name}</h3>

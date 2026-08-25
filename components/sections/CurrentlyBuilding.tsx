@@ -37,11 +37,17 @@ export function CurrentlyBuilding({ index, total }: { index: number; total: numb
         Currently building
       </h2>
       <div className="mt-12 space-y-12">
-        {BUILDS.map((build) => (
-          <article key={build.name} className="border-l border-border pl-6">
+        {BUILDS.map((build, idx) => (
+          <article
+            key={build.name}
+            className="group border-l border-border pl-6 transition-all duration-300 hover:border-accent"
+            style={{ animationDelay: `${idx * 80}ms` }}
+          >
             <div className="flex items-center gap-3">
               <StatusDot status={build.status} />
-              <h3 className="font-display text-2xl text-text">{build.name}</h3>
+              <h3 className="font-display text-2xl text-text transition-colors group-hover:text-accent">
+                {build.name}
+              </h3>
             </div>
             <p className="mt-4 text-text">{build.description}</p>
             <div className="mt-4 flex flex-wrap gap-2">

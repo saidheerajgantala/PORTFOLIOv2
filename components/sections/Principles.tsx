@@ -1,4 +1,8 @@
+'use client';
+
+import { useState } from 'react';
 import { SectionNumber } from '@/components/layout/SectionNumber';
+import { cn } from '@/lib/utils';
 
 const PRINCIPLES = [
   {
@@ -20,6 +24,8 @@ const PRINCIPLES = [
 ];
 
 export function Principles({ index, total }: { index: number; total: number }) {
+  const [openIdx, setOpenIdx] = useState<number | null>(0); // First open by default
+
   return (
     <section
       id="principles"
@@ -30,13 +36,70 @@ export function Principles({ index, total }: { index: number; total: number }) {
       <h2 id="principles-heading" className="mt-4 font-display text-4xl text-text">
         Principles
       </h2>
-      <dl className="mt-12 space-y-8">
-        {PRINCIPLES.map((p) => (
-          <div key={p.title}>
-            <dt className="font-display text-xl text-accent">{p.title}</dt>
-            <dd className="mt-2 text-text">{p.body}</dd>
-          </div>
-        ))}
+      <p className="mt-4 text-muted max-w-prose">
+        Tap a principle to read the reasoning behind it.
+      </p>
+      <dl className="mt-12 space-y-3">
+        {PRINCIPLES.map((p, i) => {
+          const isOpen = openIdx === i;
+          const num = String(i + 1).padStart(2, '0');
+          return (
+            <div
+              key={p.title}
+              className={cn(
+                'border transition-all duration-300',
+                isOpen
+                  ? 'border-accent bg-accent/[0.03]'
+                  : 'border-border hover:border-accent/60'
+              )}
+            >
+              <button
+                type="button"
+                onClick={() => setOpenIdx(isOpen ? null : i)}
+                aria-expanded={isOpen}
+                className="w-full text-left p-5 flex items-start gap-4"
+              >
+                <span
+                  className={cn(
+                    'font-mono text-xs uppercase tracking-widest transition-colors',
+                    isOpen ? 'text-accent' : 'text-muted'
+                  )}
+                >
+                  {num}
+                </span>
+                <dt
+                  className={cn(
+                    'flex-1 font-display text-xl transition-colors',
+                    isOpen ? 'text-accent' : 'text-text'
+                  )}
+                >
+                  {p.title}
+                </dt>
+                <span
+                  aria-hidden="true"
+                  className={cn(
+                    'mt-1 inline-block font-mono text-xs text-muted transition-transform duration-300',
+                    isOpen && 'rotate-180 text-accent'
+                  )}
+                >
+                  ↓
+                </span>
+              </button>
+              <div
+                className={cn(
+                  'grid transition-all duration-300 ease-out',
+                  isOpen ? 'grid-rows-[1fr] opacity-100' : 'grid-rows-[0fr] opacity-0'
+                )}
+              >
+                <div className="overflow-hidden">
+                  <dd className="px-5 pb-5 pl-12 text-text leading-relaxed">
+                    {p.body}
+                  </dd>
+                </div>
+              </div>
+            </div>
+          );
+        })}
       </dl>
     </section>
   );
