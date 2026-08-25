@@ -16,4 +16,16 @@ describe('CareerArc', () => {
     // Use a flexible check — any text matching pattern MM/YYYY or YYYY
     expect(screen.getAllByText(/\d{4}/).length).toBeGreaterThan(0);
   });
+
+  it('renders all four roles: EPAM + Premium Parking SE + Premium Parking Assoc SE + Xebia intern', () => {
+    render(<CareerArc index={4} total={9} />);
+    expect(screen.getByText(/EPAM Systems/i)).toBeInTheDocument();
+    expect(screen.getAllByText(/Premium Parking \(Xebia\)/i).length).toBe(2);
+    expect(screen.getByText(/Engineer Intern/i)).toBeInTheDocument();
+  });
+
+  it('lists the Associate SE role with Hasura/GraphQL stack', () => {
+    render(<CareerArc index={4} total={9} />);
+    expect(screen.getByText(/Hasura/i)).toBeInTheDocument();
+  });
 });
