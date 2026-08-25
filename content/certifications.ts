@@ -33,4 +33,16 @@ export const CERTIFICATIONS: CertificationMeta[] = [
     issuer: 'Infosys',
     issued: '2022-01',
   },
+  {
+    slug: 'google-gemini-agent-dev',
+    title: 'Certified Partner Specialist — Gemini Enterprise Agent Development',
+    issuer: 'Google',
+    issued: '2026-08',
+  },
+  {
+    slug: 'google-gemini-deployment',
+    title: 'Certified Partner Specialist — Gemini Enterprise Deployment',
+    issuer: 'Google',
+    issued: '2026-08',
+  },
 ];

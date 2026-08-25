@@ -2,8 +2,14 @@ import { describe, it, expect } from 'vitest';
 import { CERTIFICATIONS } from '@/content/certifications';
 
 describe('CERTIFICATIONS', () => {
-  it('has 5 entries', () => {
-    expect(CERTIFICATIONS).toHaveLength(5);
+  it('has 7 entries', () => {
+    expect(CERTIFICATIONS).toHaveLength(7);
+  });
+
+  it('includes the two Google Gemini Enterprise certs (Aug 2026)', () => {
+    const slugs = CERTIFICATIONS.map((c) => c.slug);
+    expect(slugs).toContain('google-gemini-agent-dev');
+    expect(slugs).toContain('google-gemini-deployment');
   });
 
   it('slugs are unique', () => {
