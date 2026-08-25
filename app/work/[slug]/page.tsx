@@ -22,7 +22,7 @@ export async function generateMetadata({
   const { slug } = await params;
   const meta = getCaseStudy(slug);
   if (!meta) return {};
-  return { title: `${meta.title} — Saidheeraj Gantala` };
+  return { title: `${meta.title} — Sai Dheeraj Gantala` };
 }
 
 export default async function CaseStudyPage({ params }: { params: Promise<{ slug: string }> }) {

@@ -17,7 +17,7 @@ export function Hero({ role }: { role: Role }) {
             className="font-display font-bold leading-none tracking-[-0.04em] text-text"
             style={{ fontSize: 'clamp(48px, 10vw, 128px)' }}
           >
-            Saidheeraj Gantala
+            Sai Dheeraj Gantala
           </h1>
           <h2 className="mt-4 font-mono text-sm uppercase tracking-[0.3em] text-muted">
             Backend Engineer · Agent Platforms · Bengaluru

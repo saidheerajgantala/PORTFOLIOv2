@@ -28,7 +28,7 @@ function Resume() {
   return (
     <Document>
       <Page size="A4" style={styles.page}>
-        <Text style={styles.name}>Saidheeraj Gantala</Text>
+        <Text style={styles.name}>Sai Dheeraj Gantala</Text>
         <Text style={styles.subhead}>
           {current.title} · {current.company}
         </Text>
