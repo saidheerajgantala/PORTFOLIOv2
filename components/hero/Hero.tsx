@@ -1,4 +1,5 @@
 import { HeroReveal } from '@/components/hero/HeroReveal';
+import { BioChip } from '@/components/hero/BioChip';
 import { HERO_BIO } from '@/content/hero-bio';
 import { HERO_VARIANT } from '@/content/hero-variants';
 import type { Role } from '@/lib/types';
@@ -31,9 +32,7 @@ export function Hero({ role }: { role: Role }) {
             {bio.spans.map((s, i) => (
               <span key={s.label}>
                 {i > 0 && <span className="mx-2 text-muted">·</span>}
-                <a href={s.href} className="text-accent hover:underline">
-                  {s.label}
-                </a>
+                <BioChip href={s.href}>{s.label}</BioChip>
               </span>
             ))}
           </p>

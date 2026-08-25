@@ -5,6 +5,7 @@ import { useWhoAmI } from '@/components/entry/whoami-store';
 import { WhoAmIModal, type WhoAmIModalHandle } from '@/components/entry/WhoAmIModal';
 import { AgentTrace } from '@/components/ambient/AgentTrace';
 import { CursorTrail } from '@/components/ambient/CursorTrail';
+import { SectionRail } from '@/components/hero/SectionRail';
 import type { Role } from '@/lib/types';
 
 interface Props {
@@ -32,6 +33,7 @@ export function HomeShell({ initialRole, initialName, children }: Props) {
   return (
     <>
       <main id="main">{children}</main>
+      <SectionRail />
       <AgentTrace />
       <CursorTrail />
       <WhoAmIModal ref={modalRef} />

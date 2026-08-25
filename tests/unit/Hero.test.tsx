@@ -10,7 +10,7 @@ const GREETING_WORDS = ['Hello.', 'Hi.', 'Hey.', 'Namaste.', 'Howdy.'];
 describe('Hero', () => {
   it('renders the static name', () => {
     render(<Hero role="recruiter" />);
-    expect(screen.getByRole('heading', { level: 1, name: /saidheeraj gantala/i })).toBeInTheDocument();
+    expect(screen.getByRole('heading', { level: 1, name: /sai dheeraj gantala/i })).toBeInTheDocument();
   });
 
   it('renders the static role line', () => {
