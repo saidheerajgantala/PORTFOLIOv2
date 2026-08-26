@@ -46,7 +46,9 @@ export function AgentTrace() {
   }, []);
 
   return (
-    <div className="fixed bottom-6 right-6 z-0 pointer-events-none max-w-md">
+    // Hidden on mobile — the log block was covering content at small viewports.
+    // Desktop-only ambient layer; mobile keeps the page clean.
+    <div className="hidden md:block fixed bottom-6 right-6 z-0 pointer-events-none max-w-md">
       <ul role="list" aria-hidden="true" className="flex flex-col gap-1">
         {lines.map((line) => (
           <Line key={line.id} line={line} />

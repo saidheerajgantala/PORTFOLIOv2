@@ -1,3 +1,6 @@
+'use client';
+
+import { motion } from 'motion/react';
 import { SectionNumber } from '@/components/layout/SectionNumber';
 import { StatusDot } from '@/components/layout/StatusDot';
 
@@ -38,13 +41,22 @@ export function CurrentlyBuilding({ index, total }: { index: number; total: numb
       </h2>
       <div className="mt-12 space-y-12">
         {BUILDS.map((build, idx) => (
-          <article
+          <motion.article
             key={build.name}
-            className="group border-l border-border pl-6 transition-all duration-300 hover:border-accent"
-            style={{ animationDelay: `${idx * 80}ms` }}
+            initial={{ opacity: 0, y: 12 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true, margin: '-10%' }}
+            transition={{ duration: 0.35, delay: idx * 0.08, ease: 'easeOut' }}
+            className="group relative border-l border-border pl-6 transition-all duration-300 hover:border-accent"
           >
             <div className="flex items-center gap-3">
-              <StatusDot status={build.status} />
+              <motion.span
+                whileHover={{ scale: 1.4 }}
+                transition={{ type: 'spring', stiffness: 300, damping: 18 }}
+                className="inline-block"
+              >
+                <StatusDot status={build.status} />
+              </motion.span>
               <h3 className="font-display text-2xl text-text transition-colors group-hover:text-accent">
                 {build.name}
               </h3>
@@ -54,13 +66,13 @@ export function CurrentlyBuilding({ index, total }: { index: number; total: numb
               {build.stack.map((tech) => (
                 <span
                   key={tech}
-                  className="font-mono text-xs uppercase tracking-widest text-muted border border-border px-2 py-1"
+                  className="font-mono text-xs uppercase tracking-widest text-muted border border-border px-2 py-1 transition-colors group-hover:border-accent/60 group-hover:text-accent"
                 >
                   {tech}
                 </span>
               ))}
             </div>
-          </article>
+          </motion.article>
         ))}
       </div>
     </section>
