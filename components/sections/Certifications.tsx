@@ -100,25 +100,6 @@ function CertCard({ cert }: { cert: typeof CERTIFICATIONS[number] }) {
                   </span>
                 ))}
               </div>
-              <div className="mt-4 flex items-center justify-between gap-3">
-                {cert.href ? (
-                  <a
-                    href={cert.href}
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    className="font-mono text-xs uppercase tracking-widest text-accent hover:underline"
-                  >
-                    Verify badge →
-                  </a>
-                ) : (
-                  <p className="font-mono text-xs uppercase tracking-widest text-muted">
-                    Issued — public badge link not on file
-                  </p>
-                )}
-                <p className="font-mono text-xs uppercase tracking-widest text-muted">
-                  {cert.issuer} · {cert.issued}
-                </p>
-              </div>
             </div>
           </motion.div>
         )}
