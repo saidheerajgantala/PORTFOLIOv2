@@ -27,10 +27,10 @@ export const HERO_VARIANT: Record<Role, HeroVariant> = {
   },
   peer: {
     sub: 'LangGraph · Temporal · Google ADK · RBAC · Backstage · Multi-cloud',
-    cta: 'Read the case study →',
+    cta: 'Architecture deep-dive →',
     tint: '#9DFF66',
     ctas: [
-      { label: 'Read the case study →', href: '/work/agent-platform', primary: true },
+      { label: 'Architecture deep-dive →', href: '#currently-building', primary: true },
       { label: 'Notes on agent reliability', href: '#currently-building' },
       { label: 'Stack →', href: '#multi-cloud' },
       { label: 'Career arc', href: '#career-arc' },

@@ -22,11 +22,6 @@ test.describe('home page', () => {
     await expect(page.locator('section#career-arc')).toBeVisible({ timeout: 5000 });
   });
 
-  test('navigates to a case study', async ({ page }) => {
-    await page.goto('/work/agent-platform');
-    await expect(page.getByRole('heading', { name: /enterprise agent platform/i })).toBeVisible({ timeout: 10000 });
-  });
-
   test('404 page shows on bad route', async ({ page }) => {
     // Note: Next.js renders app/not-found.tsx with HTTP 200 for unmatched
     // paths (it's a "soft" 404). The page content is what we care about

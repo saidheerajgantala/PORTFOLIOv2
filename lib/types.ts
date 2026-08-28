@@ -37,21 +37,6 @@ export interface CareerStop {
   achievements: string[];
 }
 
-export interface ImpactMetric {
-  label: string;
-  value: string;
-}
-
-export interface CaseStudyMeta {
-  slug: string;
-  title: string;
-  subtitle: string;
-  period: string;
-  role: string;
-  stack: string[];
-  impact?: ImpactMetric[];
-}
-
 export interface CertificationMeta {
   slug: string;
   title: string;
