@@ -57,5 +57,7 @@ export interface CertificationMeta {
   title: string;
   issuer: string;
   issued: string;     // ISO YYYY-MM
+  description: string;  // what the cert covers / signals
+  skills: string[];     // skills/topic areas the cert maps to
   href?: string;
 }

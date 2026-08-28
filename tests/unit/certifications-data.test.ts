@@ -17,11 +17,14 @@ describe('CERTIFICATIONS', () => {
     expect(new Set(slugs).size).toBe(slugs.length);
   });
 
-  it('every entry has non-empty title, issuer, issued', () => {
+  it('every entry has non-empty title, issuer, issued, description, and at least one skill', () => {
     for (const c of CERTIFICATIONS) {
       expect(c.title.length).toBeGreaterThan(0);
       expect(c.issuer.length).toBeGreaterThan(0);
       expect(c.issued).toMatch(/^\d{4}-\d{2}$/);
+      expect(c.description.length).toBeGreaterThan(0);
+      expect(c.skills.length).toBeGreaterThan(0);
+      expect(c.skills.every((s) => s.length > 0)).toBe(true);
     }
   });
 

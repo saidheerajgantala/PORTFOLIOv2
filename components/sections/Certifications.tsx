@@ -18,7 +18,7 @@ export function Certifications({ index, total }: { index: number; total: number 
         Certifications
       </h2>
       <p className="mt-4 text-muted max-w-prose">
-        Tap a card to verify the badge or read the issuing body.
+        Tap a card to see what each cert covers and the skills it maps to.
       </p>
       <ul className="mt-12 grid grid-cols-1 md:grid-cols-2 gap-4">
         {CERTIFICATIONS.map((c) => (
@@ -89,27 +89,36 @@ function CertCard({ cert }: { cert: typeof CERTIFICATIONS[number] }) {
             className="overflow-hidden"
           >
             <div className="px-6 pb-6 pt-2 border-t border-border">
-              <p className="text-text leading-relaxed">
-                Issued by{' '}
-                <span className="text-accent font-mono text-xs uppercase tracking-widest">
-                  {cert.issuer}
-                </span>{' '}
-                in {cert.issued}.
-              </p>
-              {cert.href ? (
-                <a
-                  href={cert.href}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  className="mt-3 inline-block font-mono text-xs uppercase tracking-widest text-accent hover:underline"
-                >
-                  Verify badge →
-                </a>
-              ) : (
-                <p className="mt-3 font-mono text-xs uppercase tracking-widest text-muted">
-                  Issued — public badge link not on file
+              <p className="text-text leading-relaxed">{cert.description}</p>
+              <div className="mt-4 flex flex-wrap gap-2">
+                {cert.skills.map((skill) => (
+                  <span
+                    key={skill}
+                    className="font-mono text-xs uppercase tracking-widest text-accent border border-accent/40 bg-accent/[0.04] px-2 py-1"
+                  >
+                    {skill}
+                  </span>
+                ))}
+              </div>
+              <div className="mt-4 flex items-center justify-between gap-3">
+                {cert.href ? (
+                  <a
+                    href={cert.href}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-mono text-xs uppercase tracking-widest text-accent hover:underline"
+                  >
+                    Verify badge →
+                  </a>
+                ) : (
+                  <p className="font-mono text-xs uppercase tracking-widest text-muted">
+                    Issued — public badge link not on file
+                  </p>
+                )}
+                <p className="font-mono text-xs uppercase tracking-widest text-muted">
+                  {cert.issuer} · {cert.issued}
                 </p>
-              )}
+              </div>
             </div>
           </motion.div>
         )}
